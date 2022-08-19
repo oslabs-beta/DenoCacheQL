@@ -1,13 +1,10 @@
 //using Oak a middleware framework for Deno
 import {  Application, Context, Router } from 'https://deno.land/x/oak/mod.ts';
 import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
-import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts'
-import { GraphQLHTTP } from 'https://deno.land/x/gql/mod.ts'
-import { gql } from 'https://deno.land/x/graphql_tag@0.0.1/mod.ts';
-//creating an instance of the router
-//const router = new Router();
+import { applyGraphQL, gql } from 'https://deno.land/x/oak_graphql/mod.ts';
+const app = new Application();
 const typeDefs = gql`
-  type Query {
+  type People {
     name: String
     mass: Int
     hair_color: String
@@ -18,29 +15,36 @@ const typeDefs = gql`
     species_id: Int
     homeworld_id: Int
     height: Int
-
-  }`
+  }
+  type Query {
+    getPeople : [People]
+  }
+  `;
   const resolvers = {
     Query: {
-        name: () => {},
-        mass: () => {}
+        getPeople: async(root : any, args : any, context : any, info : any) => {
+            const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
+            //console.log('context--->', context);
+            //context.response.body = person;
+            //console.log('context---->', context.response);
+            console.log('person--->', person.rows);
+            return person.rows;
+        }
     }
   }
-  const context = (context: Context) => ({
-    request: context.request,
-  });
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-
-
-
-//create an instance of application
-const app = new Application();
-
 const PORT = 3000;
-app.use((ctx) => {
-    ctx.response.body = 'Hello Deno!!!'
-})
+// app.use((ctx) => {
+//     ctx.response.body = 'Hello Deno!!!'
+// });
+const GrapQLService = await applyGraphQL<Router>({
+  Router,
+typeDefs,
+resolvers,
+context: (ctx) => {
+
+}
+});
+app.use(GrapQLService.routes(), GrapQLService.allowedMethods())
 //Implementing router
 //app.use(graphQL_Router.routes());
 //allow graphQL_Router HTTP methods
