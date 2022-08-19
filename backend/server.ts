@@ -23,16 +23,28 @@ const typeDefs = gql`
   const resolvers = {
     Query: {
         getPeople: async(root : any, args : any, context : any, info : any) => {
-            const person: People[] | undefined[] = await SELECT * FROM people;
-            return person;
+            const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
+            //console.log('context--->', context);
+            //context.response.body = person;
+            //console.log('context---->', context.response);
+            console.log('person--->', person.rows);
+            return person.rows;
         }
     }
   }
 const PORT = 3000;
-app.use((ctx) => {
-    ctx.response.body = 'Hello Deno!!!'
-});
+// app.use((ctx) => {
+//     ctx.response.body = 'Hello Deno!!!'
+// });
+const GrapQLService = await applyGraphQL<Router>({
+  Router,
+typeDefs,
+resolvers,
+context: (ctx) => {
 
+}
+});
+app.use(GrapQLService.routes(), GrapQLService.allowedMethods())
 //Implementing router
 //app.use(graphQL_Router.routes());
 //allow graphQL_Router HTTP methods
