@@ -7,4 +7,9 @@ const redis = await connect({
     password: "1eyX8AGHDPj961FSiCaaNrcG4a995swi",
   });
 
+  //change to make it dynamic later
+  await redis.set("name", "Luke Skywalker")
+  const name = await redis.get("name")
+  console.log(name)
+
   export { redis }
