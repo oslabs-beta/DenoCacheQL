@@ -23,10 +23,10 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getPeople: async () => {
-      const redisKey = 'SELECT name FROM people WHERE _id=1';
+      const redisKey = 'SELECT name FROM people WHERE _id=27';
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
-      console.time()
+      console.time();
       const person = await redis.exists(redisKey);
       if (!person) {
         console.log('entered conditional');
@@ -36,6 +36,7 @@ const resolvers = {
         //then save the query and the response as the key value pair in redis
         await redis.set(redisKey, JSON.stringify(character.rows));
         // //return the responsect
+        const timeFromServer = console.timeEnd();
         return character.rows;
       }
       //if we find the value, then return
@@ -45,7 +46,6 @@ const resolvers = {
       console.log('after formatting....', formattedResponse);
       const timeFromCache = console.timeEnd();
       return formattedResponse;
-      
     },
   },
 };
