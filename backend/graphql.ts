@@ -26,6 +26,7 @@ const resolvers = {
       const redisKey = 'SELECT name FROM people WHERE _id=1';
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
+      console.time()
       const person = await redis.exists(redisKey);
       if (!person) {
         console.log('entered conditional');
@@ -42,7 +43,9 @@ const resolvers = {
       console.log('format....', formatThis);
       const formattedResponse = JSON.parse(formatThis);
       console.log('after formatting....', formattedResponse);
+      const timeFromCache = console.timeEnd();
       return formattedResponse;
+      
     },
   },
 };
