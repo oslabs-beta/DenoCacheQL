@@ -41,11 +41,22 @@ const resolvers = {
       }
       //if we find the value, then return
       const formatThis = await redis.get(redisKey);
+     
       console.log('format....', formatThis);
-      const formattedResponse = JSON.parse(formatThis);
-      console.log('after formatting....', formattedResponse);
-      const timeFromCache = console.timeEnd();
-      return formattedResponse;
+      if(typeof formatThis !== 'string'){
+        
+      let format = JSON.stringify(formatThis);
+      return JSON.parse(format)
+
+      } else{
+      let formattedResponse = JSON.parse(formatThis);
+      return formattedResponse
+      }
+     
+      
+      // console.log('after formatting....', formatThis);
+      // const timeFromCache = console.timeEnd();
+      // return format;
     },
   },
 };
