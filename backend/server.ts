@@ -4,7 +4,7 @@ import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
 import { redis } from './redis.ts'
 import { applyGraphQL, gql } from 'https://deno.land/x/oak_graphql/mod.ts';
 import { typeDefs, resolvers } from './graphql.ts';
-
+import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 
 
 const app = new Application();
@@ -19,7 +19,7 @@ const GraphQLService = await applyGraphQL<Router>({
   context: (ctx) => {}
   });
 
-
+app.use(staticFiles("src/client/"));
 app.use(GraphQLService.routes(), GraphQLService.allowedMethods());
 
 app.addEventListener('listen', ({ secure, hostname, port}) => {
