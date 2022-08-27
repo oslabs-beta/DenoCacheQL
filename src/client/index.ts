@@ -1,0 +1,1 @@
+import { React, ReactDOM} from "./dep";

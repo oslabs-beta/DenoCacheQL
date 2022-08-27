@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "module": "commonjs",
+    "jsxFragmentFactory": "React.Fragment",
+    "target": "es6",
+    "noImplicitAny": true,
+    "esModuleInterop": true
+  }
+  "include": ["src/**/*"]
+}
