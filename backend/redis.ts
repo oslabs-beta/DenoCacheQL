@@ -8,8 +8,8 @@ const redis = await connect({
   });
 
   //change to make it dynamic later
-  //await redis.set("name", "Luke Skywalker")
-  //const name = await redis.get("name")
-  //console.log(name)
+  //await redis.flushall()
+  // const name = await redis.get("name")
+  // console.log(name)
 
   export { redis }

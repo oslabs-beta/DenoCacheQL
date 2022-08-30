@@ -4,15 +4,14 @@ import { redis } from './redis.ts';
 
 const typeDefs = gql`
   type People {
+    _id: Int
     name: String
-    mass: Int
+    mass: String
     hair_color: String
     skin_color: String
     eye_color: String
     birth_year: String
     gender: String
-    species_id: Int
-    homeworld_id: Int
     height: Int
   }
   type Query {
@@ -23,7 +22,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getPeople: async () => {
-      const redisKey = 'SELECT name FROM people WHERE _id=28';
+      const redisKey = 'SELECT name, height FROM people WHERE _id=15';
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
       console.time();
