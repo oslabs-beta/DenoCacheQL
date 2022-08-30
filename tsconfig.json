@@ -5,7 +5,10 @@
     "module": "commonjs",
     "jsxFragmentFactory": "React.Fragment",
     "target": "es6",
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "lib" : 
+      ["dom", "es6" ,"dom.iterable","esnext", "ScriptHost"]
+    
+  },
   "include": ["src/**/*"]
 }

@@ -1,8 +1,8 @@
 //import react
-import React from 'https://esm.sh/react';
+import React from "https://esm.sh/react@18.2.0";
 //import react-dom
-import { ReactDOM } from 'https://esm.sh/react-dom';
-import { createRoot } from 'https://dev.jspm.io/react-dom/client';
+import  ReactDOM  from "https://esm.sh/react-dom@18.2.0";
+// import { createRoot } from 'https://dev.jspm.io/react-dom/client';
 //import react hooks
 
 //import chart.js
@@ -11,7 +11,7 @@ import { createRoot } from 'https://dev.jspm.io/react-dom/client';
 
 //
 
-export { React, ReactDOM, createRoot };
+export { React, ReactDOM };
 
 // import {
 //   Application,

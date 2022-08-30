@@ -7,6 +7,7 @@ import { typeDefs, resolvers } from './server/graphql.ts';
 import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom/server';
 import App from './client/App.tsx';
+import React from "https://esm.sh/v92/@types/react@18.0.17/index";
 
 const app = new Application();
 const router = new Router();
