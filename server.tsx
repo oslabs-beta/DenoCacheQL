@@ -1,9 +1,13 @@
 //using Oak a middleware framework for Deno
-import {  Application, Context, Router } from 'https://deno.land/x/oak/mod.ts';
+import {  Application, Router } from 'https://deno.land/x/oak/mod.ts';
+//Deno and postgress middleware
 import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
+//Redis connection
 import { redis } from './server/redis.ts'
+//GraphQl definitions and deno middlesware
 import { applyGraphQL, gql } from 'https://deno.land/x/oak_graphql/mod.ts';
 import { typeDefs, resolvers } from './server/graphql.ts';
+//Serving frontend
 import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 import ReactDOMServer from "https://esm.sh/react-dom@18.2.0/server";
 import App from './client/App.tsx';
@@ -22,28 +26,9 @@ const GraphQLService = await applyGraphQL<Router>({
 
  router.get('/', handlePage);
  
- //bundle client-side code
-//  const [_,clientJS] = await Deno.bundle('./client/client.tsx')
 
- //router for bundle
  const serverrouter = new Router();
-// serverrouter.get('/static/client.js', (context) =>{
-//   context.response.headers.set('Content-Type', 'text/html');
-//   context.response.body = `
-//   <!DOCTYPE html>
-//   <html lang="en">
-//   <head>
-//       <meta charset="UTF-8">
-//       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//       <link rel="stylesheet" type="text/css" href="client/static/style.css">
-//       <title>DenoCachQL</title>
-//   </head>
-//   <body >
-//       <div id="root">${ReactDOMServer.renderToString(<App />)}
-//       </div>
-//   </body>
-//   </html>`
-// })
+
 
 app.use(staticFiles("/client/"));
 app.use(router.routes());
