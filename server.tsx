@@ -13,42 +13,18 @@ import ReactDOMServer from "https://esm.sh/react-dom@18.2.0/server";
 import App from './client/App.tsx';
 import {React} from "./deps.ts";
 
+
+
 const app = new Application();
 const router = new Router();
 const PORT = 3000;
 
-const GraphQLService = await applyGraphQL<Router>({
-  Router,
-  typeDefs,
-  resolvers,
-  context: (ctx) => {}
-  });
-
- router.get('/', handlePage);
- 
-
- const serverrouter = new Router();
-
-
-app.use(staticFiles("/client/"));
 app.use(router.routes());
-app.use(serverrouter.routes());
 app.use(router.allowedMethods());
-app.use(GraphQLService.routes(), GraphQLService.allowedMethods());
 
-app.addEventListener('listen', ({ secure, hostname, port}) => {
-    const protocol = secure ? 'https://' : 'http://';
-    const url = `${protocol}${hostname ?? "localhost"}: ${port}`;
-    console.log(`Listening on: ${port}`);
-});
-
-console.log(await redis.ping());
-
-const databaseURL = 'postgres://cdfnqalb:5M9CGQwdkSUEnyyRy7xTU5tixqFkVDaH@drona.db.elephantsql.com/cdfnqalb';
-const client = new Client(databaseURL)
-await client.connect();
-
-await app.listen( {port: PORT});
+//serving frontend
+router.get('/', handlePage);
+app.use(staticFiles("/client/"));
 
 function handlePage(ctx:any){
   try{
@@ -63,18 +39,40 @@ function handlePage(ctx:any){
    </head>
  <body >
    <div id="root">${body}</div>
-
- 
  </body>
-
  </html>`;
-
  } catch (error) {
-
    console.error(error);
-
   }
 }
+
+//GraphQl
+const GraphQLService = await applyGraphQL<Router>({
+  Router,
+  typeDefs,
+  resolvers,
+  context: (ctx) => {}
+  });
+
+app.use(GraphQLService.routes(), GraphQLService.allowedMethods());
+
+//redis
+console.log(await redis.ping());
+
+//database
+const databaseURL = 'postgres://cdfnqalb:5M9CGQwdkSUEnyyRy7xTU5tixqFkVDaH@drona.db.elephantsql.com/cdfnqalb';
+const client = new Client(databaseURL)
+await client.connect();
+
+//checking server connection
+app.addEventListener('listen', ({ secure, hostname, port}) => {
+  const protocol = secure ? 'https://' : 'http://';
+  const url = `${protocol}${hostname ?? "localhost"}: ${port}`;
+  console.log(`Listening on: ${port}`);
+});
+
+await app.listen( {port: PORT});
+
 
 export { client }
 
