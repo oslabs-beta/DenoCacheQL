@@ -5,3 +5,7 @@ body {
 .app {
   border: 1px solid blue;
 }
+
+.test {
+  border: 1px solid red;
+}

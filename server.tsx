@@ -5,9 +5,9 @@ import { redis } from './server/redis.ts'
 import { applyGraphQL, gql } from 'https://deno.land/x/oak_graphql/mod.ts';
 import { typeDefs, resolvers } from './server/graphql.ts';
 import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
-import ReactDOMServer from 'https://esm.sh/react-dom/server';
+import ReactDOMServer from "https://esm.sh/react-dom@18.2.0/server";
 import App from './client/App.tsx';
-import React from "https://esm.sh/v92/@types/react@18.0.17/index";
+import {React} from "./deps.ts";
 
 const app = new Application();
 const router = new Router();
@@ -23,16 +23,29 @@ const GraphQLService = await applyGraphQL<Router>({
  router.get('/', handlePage);
  
  //bundle client-side code
- const [_,clientJS] = await Deno.bundle('./client/client.tsx')
+//  const [_,clientJS] = await Deno.bundle('./client/client.tsx')
 
  //router for bundle
  const serverrouter = new Router();
-serverrouter.get('/static/client.js', (context) =>{
-  context.response.headers.set('Content-Type', 'text/html');
-  context.response.body = clientJS;
-})
+// serverrouter.get('/static/client.js', (context) =>{
+//   context.response.headers.set('Content-Type', 'text/html');
+//   context.response.body = `
+//   <!DOCTYPE html>
+//   <html lang="en">
+//   <head>
+//       <meta charset="UTF-8">
+//       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//       <link rel="stylesheet" type="text/css" href="client/static/style.css">
+//       <title>DenoCachQL</title>
+//   </head>
+//   <body >
+//       <div id="root">${ReactDOMServer.renderToString(<App />)}
+//       </div>
+//   </body>
+//   </html>`
+// })
 
-app.use(staticFiles("src/client/"));
+app.use(staticFiles("/client/"));
 app.use(router.routes());
 app.use(serverrouter.routes());
 app.use(router.allowedMethods());
@@ -54,12 +67,12 @@ await app.listen( {port: PORT});
 
 function handlePage(ctx:any){
   try{
-    const body = (ReactDOMServer as any).renderToString(<App/>);
+    const body = (ReactDOMServer).renderToString(<App/>);
   ctx.response.body = `<!DOCTYPE html>
  <html lang="en">
    <head>
    <meta charset="UTF-8">
-   <link rel="stylesheet" href="/static/style.css">
+   <link rel="stylesheet" type="text/css" href="/static/style.css">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
    <title>DenoCacheQL Demo</title>
    </head>
@@ -67,9 +80,6 @@ function handlePage(ctx:any){
    <div id="root">${body}</div>
 
  
-
-   <script  src="/static/client.js" defer></script>
-
  </body>
 
  </html>`;
