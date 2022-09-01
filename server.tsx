@@ -9,7 +9,7 @@ import ReactDOMServer from "https://esm.sh/react-dom@18.2.0/server";
 import App from './client/App.tsx';
 import {React} from "./deps.ts";
 import './client/client.tsx';
-
+import { emit } from "https://deno.land/x/emit@0.8.0/mod.ts";
 
 const app = new Application();
 const router = new Router();
@@ -22,37 +22,24 @@ const GraphQLService = await applyGraphQL<Router>({
   context: (ctx) => {}
   });
 
- router.get('/', handlePage);
- 
- //bundle client-side code
- // const [_,clientJS] =  Deno.bundle('./client/client.tsx')
+   //bundle client-side code
+ const files =  await emit('./client/client.tsx');
+ console.log(files)
 
- //router for bundle
- const serverrouter = new Router();
-// serverrouter.get('/main.js', (context) =>{
-//   context.response.headers.set('Content-Type', 'text/html');
-//   context.response.body = `
-//   <!DOCTYPE html>
-//   <html lang="en">
-//   <head>
-//       <meta charset="UTF-8">
-//       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//       <link rel="stylesheet" type="text/css" href="client/static/style.css">
-//       <title>DenoCachQL</title>
-//   </head>
-//   <body >
-//       <div id="root">${ReactDOMServer.renderToString(<App />)}
-//       </div>
-//   </body>
-//   </html>`
-// })
+router.get('/static/client.js', (context) =>{
+    context.response.headers.set('Content-Type', 'application/json');
+    context.response.body =files
+  })
+router.get('/', handlePage);
+ 
+
+
 // const js = './client/client.tsx';
 // router.get('/', () => {
 //   const body = 
 // })
 app.use(staticFiles("/client/"));
 app.use(router.routes());
-app.use(serverrouter.routes());
 app.use(router.allowedMethods());
 app.use(GraphQLService.routes(), GraphQLService.allowedMethods());
 
@@ -72,7 +59,7 @@ await app.listen( {port: PORT});
 
 function handlePage(ctx:any){
   try{
-    const body = (ReactDOMServer).renderToString(<App/>);
+    const body = ReactDOMServer.renderToString(<App/>);
   ctx.response.body = `<!DOCTYPE html>
  <html lang="en">
    <head>
@@ -83,7 +70,7 @@ function handlePage(ctx:any){
    </head>
  <body >
    <div id="root">${body}</div>
-
+   <script  src="http://localhost:3000/static/client.js" defer></script>
  
  </body>
 

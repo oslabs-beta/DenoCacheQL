@@ -8,4 +8,6 @@ import  App  from './App.tsx';
 //     document.getElementById('root')
 // );
 // export default root;
-export default ReactDOM.hydrate(<App />, document.getElementById('root'));
+if (typeof document !== 'undefined') {
+ReactDOM.hydrate(<App />, document.getElementById('root'));
+}

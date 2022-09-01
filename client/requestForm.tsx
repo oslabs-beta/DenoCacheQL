@@ -22,14 +22,15 @@ import React, { useRef } from 'https://esm.sh/react';
 // }
 const RequestForm: React.FC = () => {
   const textInputRef = useRef<HTMLInputElement>(null)
+  
 const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault()
+  e.preventDefault();
   let text = textInputRef.current!.value
   console.log('clicked');
   console.log(text)
 }
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor='text'></label>
         <input type='text'  ref={textInputRef} />

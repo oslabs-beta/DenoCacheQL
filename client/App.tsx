@@ -10,7 +10,7 @@ const test = 'some text';
 const App = () => {
   return (
     <div className="app">
-      <h1>`rendering app.tsx ${test}`</h1>
+      <h1>rendering app.tsx {test}</h1>
       <RequestForm />
     </div>
   );
