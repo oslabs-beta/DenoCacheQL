@@ -8,6 +8,8 @@ import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 import ReactDOMServer from "https://esm.sh/react-dom@18.2.0/server";
 import App from './client/App.tsx';
 import {React} from "./deps.ts";
+import './client/client.tsx';
+
 
 const app = new Application();
 const router = new Router();
@@ -23,11 +25,11 @@ const GraphQLService = await applyGraphQL<Router>({
  router.get('/', handlePage);
  
  //bundle client-side code
-//  const [_,clientJS] = await Deno.bundle('./client/client.tsx')
+ // const [_,clientJS] =  Deno.bundle('./client/client.tsx')
 
  //router for bundle
  const serverrouter = new Router();
-// serverrouter.get('/static/client.js', (context) =>{
+// serverrouter.get('/main.js', (context) =>{
 //   context.response.headers.set('Content-Type', 'text/html');
 //   context.response.body = `
 //   <!DOCTYPE html>
@@ -44,7 +46,10 @@ const GraphQLService = await applyGraphQL<Router>({
 //   </body>
 //   </html>`
 // })
-
+// const js = './client/client.tsx';
+// router.get('/', () => {
+//   const body = 
+// })
 app.use(staticFiles("/client/"));
 app.use(router.routes());
 app.use(serverrouter.routes());
@@ -58,7 +63,7 @@ app.addEventListener('listen', ({ secure, hostname, port}) => {
 });
 
 console.log(await redis.ping());
-
+const jsBundlePath = "/main.js"
 const databaseURL = 'postgres://cdfnqalb:5M9CGQwdkSUEnyyRy7xTU5tixqFkVDaH@drona.db.elephantsql.com/cdfnqalb';
 const client = new Client(databaseURL)
 await client.connect();

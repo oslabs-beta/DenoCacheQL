@@ -1,25 +1,41 @@
-import React from 'https://esm.sh/react';
+import React, { useRef } from 'https://esm.sh/react';
+
 // import { TextField } from 'https://jspm.dev/@material-ui/core@4.11.0';
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log('clicked!');
-  console.log(e);
-};
+// const handleSubmit = (e: React.MouseEvent) => {
+//   e.preventDefault();
 
-export default function RequestForm() {
-  return (
-    <>
-      <div className="test">
-        <h1>this is the test component</h1>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <label>Find Person</label>
-          <input type="text"></input>
-        </form>
-        <button type="submit" onClick={(e) => handleSubmit(e)}>
-          Submit Query
-        </button>
-      </div>
-    </>
-  );
+//   console.log('clicked!');
+  
+// };
+
+// export default function RequestForm() {
+//   return (
+   
+//       <div className="test" onClick={handleSubmit}>
+//         <button onClick={handleSubmit}>Submit</button>
+        
+        
+//       </div>
+    
+//   );
+// }
+const RequestForm: React.FC = () => {
+  const textInputRef = useRef<HTMLInputElement>(null)
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+  let text = textInputRef.current!.value
+  console.log('clicked');
+  console.log(text)
 }
+  return (
+    <form>
+      <div>
+        <label htmlFor='text'></label>
+        <input type='text'  ref={textInputRef} />
+      </div>
+      <button type='submit'>Submit</button>
+    </form>
+  )
+}
+export default RequestForm;
