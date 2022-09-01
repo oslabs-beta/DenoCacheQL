@@ -1,5 +1,5 @@
 //import react
-import React, { useState, useEffect } from 'https://esm.sh/react@18.2.0';
+import React, { useState, useEffect, useRef } from 'https://esm.sh/react@18.2.0';
 import RequestForm from './requestForm.tsx';
 
 // import './static/style.css'
@@ -24,12 +24,21 @@ const App = () => {
   // const isSsr = useIsSsr();
   // if (isSsr) return null;
 
+ 
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+ 
+    console.log('clicked');
+    
+  }
   return (
     <>
       <div className="app">
         <h1>rendering app.tsx</h1>
-        <RequestForm />
+        <button onClick={() => console.log('clicked')}>Click Me</button> 
+       
+       
       </div>
     </>
   );

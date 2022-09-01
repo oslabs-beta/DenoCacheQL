@@ -27,15 +27,17 @@ const RequestForm: React.FC = () => {
     // let text = textInputRef.current!.value;
     console.log('clicked');
     // console.log(text);
+   
   };
   return (
-    <div>
-      <label htmlFor="text"></label>
-      <input type="text" ref={textInputRef} />
-      <button type="button" onClick={(e) => handleSubmit(e)}>
-        Submit
-      </button>
-    </div>
+    <button onClick={() => console.log('clicked')}></button>
+    // <div>
+    //   <label htmlFor="text"></label>
+    //   <input type="text" ref={textInputRef} />
+    //   <button type="button" onClick={(e) => handleSubmit(e)}>
+    //     Submit
+    //   </button>
+    // </div>
   );
 };
 export default RequestForm;

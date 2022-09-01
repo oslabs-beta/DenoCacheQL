@@ -22,9 +22,9 @@ const GraphQLService = await applyGraphQL<Router>({
   });
 
 const jsBundle = '/main.js';
-
-const js = `import React from "https://jspm.dev/react@16.13.1";
- import ReactDOM from "https://jspm.dev/react-dom@16.13.1";
+//"https://jspm.dev/react@16.13.1" react "https://jspm.dev/react-dom@16.13.1" reactDOM
+const js = `import React from "https://esm.sh/react@18.2.0";
+ import ReactDOM from "https://esm.sh/react-dom@18.2.0";
  const App = ${App};
  ReactDOM.hydrate(React.createElement(App), document.getElementById('app'));`;
 
@@ -34,7 +34,7 @@ const html = `<html>
       <script type="module" src="${jsBundle}"></script>
     </head>
     <body>
-      <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
+      <div id="app">${ReactDOMServer.renderToReadableStream(<App />)}</div>  
     </body>
   </html>`;
 
