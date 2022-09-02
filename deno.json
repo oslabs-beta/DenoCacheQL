@@ -1,0 +1,24 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-env server.tsx"
+  },
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "module": "commonjs",
+    "jsxFragmentFactory": "React.Fragment",
+    "target": "es6",
+    "lib" : 
+      ["dom", 
+      "es6" ,
+      "dom.iterable",
+      "esnext",
+      "ScriptHost",
+      "deno.ns"]
+  },
+  "include": ["client/**/*"],
+  "strict": true,
+  "esModuleInterop": true,
+  "skipLibCheck": true,
+  "forceConsistentCasingInFileNames": true 
+}
