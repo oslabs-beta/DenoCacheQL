@@ -10,6 +10,7 @@ import App from './client/App.tsx';
 import { React } from './deps.ts';
 // import './client/client.tsx';
 import { emit } from 'https://deno.land/x/emit@0.8.0/mod.ts';
+import data from 'https://deno.land/std@0.141.0/_wasm_crypto/crypto.wasm.mjs';
 
 const app = new Application();
 const router = new Router();
@@ -50,6 +51,10 @@ const html = `<html>
     </body>
   </html>`;
 
+router.post('/graphql', (context: Context) => {
+  context.response.body = data;
+  console.log(context.response.body);
+});
 router
   .get('/', (context: Context) => {
     context.response.type = 'text/html';
