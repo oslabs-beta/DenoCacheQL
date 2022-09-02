@@ -1,11 +1,16 @@
 //import react
-import React, { useState, useEffect, useRef } from 'https://esm.sh/react@18.2.0';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+} from 'https://esm.sh/react@18.2.0';
+import ReactDOM from 'https://esm.sh/react-dom@18.2.0';
 import RequestForm from './requestForm.tsx';
 
 // import './static/style.css'
 
 //main app container
-const test = 'some text';
+
 // const useIsSsr = () => {
 //   // we always start off in "SSR mode", to ensure our initial browser render
 //   // matches the SSR render
@@ -23,22 +28,42 @@ const test = 'some text';
 const App = () => {
   // const isSsr = useIsSsr();
   // if (isSsr) return null;
+  const [queryInputNumber, setQueryInputNumber] = React.useState('');
+  // const [queryResponse, setQueryResponse] = React.useState('');
+  // const [responseTime, setResponseTime] = React.useState('');
+  const [queryHistory, setQueryHistory] = React.useState([]);
 
- 
+  const handleSubmitQuery = async () => {
+    // console.log('clicked');
+    // console.log(queryInputNumber.nativeEvent.data);
+    const query: string = `query getPeople($queryNumber: Int){getPeople()}`
+    try{
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
- 
-    console.log('clicked');
+    const response = await fetch('/graphql',{
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    body: JSON.stringify({query: { getPeople } queryInputNumber.nativeEvent.data})
+    }
     
-  }
+  })
+    }
+    //backend checks redis, then db, then returns response
+    //set
+    //take the response and push an object to queryHistory. the object will contain queryInputNumber, queryresponse, responseTime
+    console.log(response);
+  };
+
   return (
     <>
       <div className="app">
         <h1>rendering app.tsx</h1>
-        <button onClick={() => console.log('clicked')}>Click Me</button> 
-       
-       
+        <div className="requestForm">
+          <input type="text" onChange={setQueryInputNumber} />
+          <button type="button" onClick={handleSubmitQuery}>
+            Click Me
+          </button>
+        </div>
       </div>
     </>
   );

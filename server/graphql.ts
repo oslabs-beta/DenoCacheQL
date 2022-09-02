@@ -23,7 +23,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getPeople: async () => {
-      const redisKey = 'SELECT name FROM people WHERE _id=28';
+      const redisKey = 'SELECT name FROM people WHERE _id=$1';
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
       console.time();

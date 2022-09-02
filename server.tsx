@@ -31,10 +31,10 @@ const js = `import React from "https://esm.sh/react@18.2.0";
 const html = `<html>
     <head>
       <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css">
-      <script type="module" src="${jsBundle}"></script>
-    </head>
-    <body>
+      </head>
+      <body>
       <div id="app">${ReactDOMServer.renderToReadableStream(<App />)}</div>  
+      <script type="module" src="${jsBundle}"></script>
     </body>
   </html>`;
 
