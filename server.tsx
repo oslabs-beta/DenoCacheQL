@@ -46,13 +46,15 @@ const html = `<html>
       <link rel="stylesheet" type="text/css" href="/static/style.css">
       </head>
       <body>
-      <div id="app">${ReactDOMServer.renderToReadableStream(<App />)}</div>  
+      <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
       <script type="module" src="${jsBundle}"></script>
     </body>
   </html>`;
 
 router.post('/graphql', (context: Context) => {
-  context.response.body = data;
+  let decoder = new TextDecoder();
+  let decodeData = decoder.decode(data);
+  context.response.body = decodeData;
   console.log(context.response.body);
 });
 router

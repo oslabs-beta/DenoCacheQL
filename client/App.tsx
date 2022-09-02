@@ -42,7 +42,7 @@ const App = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
           body: JSON.stringify({
             query: `{
         getPeople {
@@ -57,6 +57,9 @@ const App = () => {
       //set
       //take the response and push an object to queryHistory. the object will contain queryInputNumber, queryresponse, responseTime
       console.log(response);
+      // response.releaseLock();
+      // const readableResponse = response.getReader();
+      // console.log(readableResponse);
       const jsonResponse = await response.json();
       console.log('json---->', jsonResponse);
     } catch (error) {
