@@ -11,13 +11,13 @@ import RequestForm from './requestForm.tsx';
 
 
 const App = () => {
-  const [queryInputNumber, setQueryInputNumber] = React.useState('');
+  const [queryInputNumber, setQueryInputNumber] = React.useState();
   // const [queryResponse, setQueryResponse] = React.useState('');
   // const [responseTime, setResponseTime] = React.useState('');
   const [queryHistory, setQueryHistory] = React.useState([]);
 
   const handleSubmitQuery = async () => {
-    // console.log(queryInputNumber.nativeEvent.data);
+    const inputNumber: string = queryInputNumber.nativeEvent.data;
     // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
     try {
       const response = await fetch('/graphql', {
@@ -28,7 +28,7 @@ const App = () => {
         },
         body: JSON.stringify({
           query: `{
-      getPeople (characterNumber: 1){
+      getPeople (characterNumber: ${inputNumber}){
         name
       }
     }`,
@@ -39,7 +39,7 @@ const App = () => {
       //take the response and push an object to queryHistory. the object will contain queryInputNumber, queryresponse, responseTime
       console.log(response);
       const jsonResponse = await response.json();
-      console.log('json---->', jsonResponse);
+      console.log('json---->', jsonResponse.data.getPeople[0]);
     } catch (error) {
       console.log('error--->', error);
     }
