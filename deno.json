@@ -15,15 +15,9 @@
       "esnext",
       "ScriptHost",
       "deno.ns"]
-<<<<<<< HEAD
-    
-  },
-  "include": ["client/**/*"],
-=======
   },
   "include": ["client/**/*"],
   "strict": true,
->>>>>>> dev
   "esModuleInterop": true,
   "skipLibCheck": true,
   "forceConsistentCasingInFileNames": true 

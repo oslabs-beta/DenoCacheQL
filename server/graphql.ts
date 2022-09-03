@@ -15,22 +15,17 @@ const typeDefs = gql`
     height: Int
   }
   type Query {
-    getPeople (characterNumber: Int): [People]
+    getPeople(characterNumber: Int): [People]
   }
 `;
 
 const resolvers = {
   Query: {
-<<<<<<< HEAD
-    getPeople: async (parent: any, { id }: any, context: any, info: any) => {
-      const redisKey = 'SELECT name FROM people WHERE _id=1';
-=======
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
-      console.log("arg", arg)
-      
-      const redisKey = `SELECT name FROM people WHERE _id=${arg.characterNumber}`;
->>>>>>> dev
-      //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
+      console.log('arg', arg);
+
+      const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${arg.characterNumber}`;
+
       //look in the cache for the provided query
       console.time();
       const person = await redis.exists(redisKey);
@@ -47,7 +42,7 @@ const resolvers = {
       }
       //if we find the value, then return
       const formatThis = await redis.get(redisKey);
-
+      console.timeEnd();
       console.log('format....', formatThis);
       if (typeof formatThis !== 'string') {
         let format = JSON.stringify(formatThis);

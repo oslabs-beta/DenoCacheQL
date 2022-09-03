@@ -36,22 +36,22 @@ const App = () => {
   const handleSubmitQuery = async () => {
     // console.log('clicked');
     // console.log(queryInputNumber.nativeEvent.data);
-    const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
+    // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
     try {
       const response = await fetch('/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          body: JSON.stringify({
-            query: `{
-        getPeople {
-          name
-        }
-      }`,
-            // { getPeople } queryInputNumber.nativeEvent.data})
-          }),
         },
+        body: JSON.stringify({
+          query: `{
+      getPeople (characterNumber: 1){
+        name
+      }
+    }`,
+          // { getPeople } queryInputNumber.nativeEvent.data})
+        }),
       });
       //backend checks redis, then db, then returns response
       //set
