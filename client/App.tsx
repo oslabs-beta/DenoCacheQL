@@ -9,15 +9,23 @@ import RequestForm from './requestForm.tsx';
 
 //main app container
 
-
 const App = () => {
-  const [queryInputNumber, setQueryInputNumber] = React.useState();
+  const [loadedResults, setLoadedResults] = React.useState(false);
+  const [queryInputNumber, setQueryInputNumber] = React.useState<
+    string | undefined
+  >(undefined);
   // const [queryResponse, setQueryResponse] = React.useState('');
   // const [responseTime, setResponseTime] = React.useState('');
   const [queryHistory, setQueryHistory] = React.useState([]);
 
+  React.useEffect(() => {
+    setLoadedResults(true);
+  }, queryHistory);
+
   const handleSubmitQuery = async () => {
-    const inputNumber: string = queryInputNumber.nativeEvent.data;
+    console.log(queryInputNumber);
+    const inputNumber: string | undefined = queryInputNumber;
+    let queryResponse: string;
     // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
     try {
       const response = await fetch('/graphql', {
@@ -40,9 +48,13 @@ const App = () => {
       console.log(response);
       const jsonResponse = await response.json();
       console.log('json---->', jsonResponse.data.getPeople[0]);
+      queryResponse = jsonResponse.data.getPeople[0];
+      // setQueryHistory(...queryHistory, jsonResponse.data.getPeople[0]);
     } catch (error) {
       console.log('error--->', error);
     }
+    // setQueryHistory(...queryHistory, queryResponse);
+    // setLoadedResults(false);
   };
 
   return (
@@ -50,10 +62,15 @@ const App = () => {
       <div className="app">
         <h1>rendering app.tsx</h1>
         <div className="requestForm">
-          <input type="text" onChange={setQueryInputNumber} />
+          <input type="text" onChange={e => {console.log('e --->', e); setQueryInputNumber(e.target.value)}} />
           <button type="button" onClick={handleSubmitQuery}>
             Click Me
           </button>
+          {/* <div className="results">
+            {queryHistory.map((row, i) => {
+              <div key={i}>{row}</div>;
+            })}
+          </div> */}
         </div>
       </div>
     </>

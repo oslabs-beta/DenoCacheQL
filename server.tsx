@@ -9,25 +9,10 @@ import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from './client/App.tsx';
 import { React } from './deps.ts';
-// import './client/client.tsx';
-import { emit } from 'https://deno.land/x/emit@0.8.0/mod.ts';
-import data from 'https://deno.land/std@0.141.0/_wasm_crypto/crypto.wasm.mjs';
-
 
 const app = new Application();
 const router = new Router();
 const PORT = 3000;
-
-
-interface ApplyGraphQLOptions<T> {
-  context?: (ctx: any) => any;
-  path?: string;
-  resolvers: ResolversProps;
-  Router: Constructable<T>;
-  settings?: ISettings;
-  typeDefs: any;
-  usePlayground?: boolean;
-}
 
 const GraphQLService = await applyGraphQL<Router>({
   Router,
