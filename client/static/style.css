@@ -1,9 +1,12 @@
-body {
+/* body {
   border: 1px solid red;
-  }
+  } */
 
 .app {
   border: 1px solid blue;
+  display: block;
+  margin: 0 auto;
+  max-width: 70%;
 }
 
 .test {

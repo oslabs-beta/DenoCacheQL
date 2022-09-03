@@ -1,6 +1,7 @@
 import { client } from '../server.tsx';
 import { gql } from 'https://deno.land/x/oak_graphql/mod.ts';
 import { redis } from './redis.ts';
+import { graphqlHttp } from 'https://deno.land/x/deno_graphql/oak.ts';
 
 const typeDefs = gql`
   type People {
@@ -22,10 +23,11 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
-      // console.log('arg', arg);
-      
-      const redisKey = `SELECT name, gender, mass, hair_color, skin_color, eye_color,birth_year, height FROM people WHERE _id=${arg.characterNumber}`;
-      //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
+
+      console.log('arg', arg);
+
+      const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${arg.characterNumber}`;
+
       //look in the cache for the provided query
       console.time();
       const person = await redis.exists(redisKey);
@@ -46,6 +48,7 @@ const resolvers = {
       const formatThis = await redis.get(redisKey);
       console.timeEnd();
       console.log('format....getting from redis', formatThis);
+
       if (typeof formatThis !== 'string') {
         let format = JSON.stringify(formatThis);
         return JSON.parse(format);
@@ -53,12 +56,9 @@ const resolvers = {
         let formattedResponse = JSON.parse(formatThis);
         return formattedResponse;
       }
-
-      // console.log('after formatting....', formatThis);
-      // const timeFromCache = console.timeEnd();
-      // return format;
     },
   },
 };
 
-export { resolvers, typeDefs };
+const usePlayground = true;
+export { resolvers, typeDefs, usePlayground };
