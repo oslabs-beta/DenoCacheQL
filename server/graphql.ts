@@ -15,14 +15,16 @@ const typeDefs = gql`
     height: Int
   }
   type Query {
-    getPeople: [People]
+    getPeople (characterNumber: Int): [People]
   }
 `;
 
 const resolvers = {
   Query: {
-    getPeople: async () => {
-      const redisKey = 'SELECT name, height FROM people WHERE _id=15';
+    getPeople: async (parent: any, arg: any, context: any, info: any) => {
+      console.log("arg", arg)
+      
+      const redisKey = `SELECT name FROM people WHERE _id=${arg.characterNumber}`;
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
       console.time();
