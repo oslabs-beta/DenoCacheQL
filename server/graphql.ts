@@ -15,7 +15,7 @@ const typeDefs = gql`
     height: Int
   }
   type Query {
-    getPeople: [People]
+    getPeople (characterNumber: Int): [People]
   }
 `;
 
