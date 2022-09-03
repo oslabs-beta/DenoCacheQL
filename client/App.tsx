@@ -7,34 +7,16 @@ import React, {
 import ReactDOM from 'https://esm.sh/react-dom@18.2.0';
 import RequestForm from './requestForm.tsx';
 
-// import './static/style.css'
-
 //main app container
 
-// const useIsSsr = () => {
-//   // we always start off in "SSR mode", to ensure our initial browser render
-//   // matches the SSR render
-//   const [isSsr, setIsSsr] = React.useState(true);
-
-//   React.useEffect(() => {
-//     // `useEffect` never runs on the server, so we must be on the client if
-//     // we hit this block
-//     setIsSsr(false);
-//   }, []);
-
-//   return isSsr;
-// };
 
 const App = () => {
-  // const isSsr = useIsSsr();
-  // if (isSsr) return null;
   const [queryInputNumber, setQueryInputNumber] = React.useState('');
   // const [queryResponse, setQueryResponse] = React.useState('');
   // const [responseTime, setResponseTime] = React.useState('');
   const [queryHistory, setQueryHistory] = React.useState([]);
 
   const handleSubmitQuery = async () => {
-    // console.log('clicked');
     // console.log(queryInputNumber.nativeEvent.data);
     // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
     try {
@@ -50,16 +32,12 @@ const App = () => {
         name
       }
     }`,
-          // { getPeople } queryInputNumber.nativeEvent.data})
         }),
       });
       //backend checks redis, then db, then returns response
       //set
       //take the response and push an object to queryHistory. the object will contain queryInputNumber, queryresponse, responseTime
       console.log(response);
-      // response.releaseLock();
-      // const readableResponse = response.getReader();
-      // console.log(readableResponse);
       const jsonResponse = await response.json();
       console.log('json---->', jsonResponse);
     } catch (error) {

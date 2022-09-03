@@ -49,16 +49,8 @@ const resolvers = {
         return JSON.parse(format);
       } else {
         let formattedResponse = JSON.parse(formatThis);
-        // console.log('parent --->', parent);
-        // console.log('id --->', id);
-        // console.log('context --->', context);
-        // console.log('info --->', info.returnType);
         return formattedResponse;
       }
-
-      // console.log('after formatting....', formatThis);
-      // const timeFromCache = console.timeEnd();
-      // return format;
     },
   },
 };

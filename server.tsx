@@ -38,7 +38,6 @@ const GraphQLService = await applyGraphQL<Router>({
 });
 
 const jsBundle = '/main.js';
-//"https://jspm.dev/react@16.13.1" react "https://jspm.dev/react-dom@16.13.1" reactDOM
 const js = `import React from "https://esm.sh/react@18.2.0";
  import ReactDOM from "https://esm.sh/react-dom@18.2.0";
  const App = ${App};
@@ -54,12 +53,6 @@ const html = `<html>
     </body>
   </html>`;
 
-// router.post('/graphql', (context: Context) => {
-//   let decoder = new TextDecoder();
-//   let decodeData = decoder.decode(data);
-//   context.response.body = decodeData;
-//   console.log(context.response.body);
-// });
 router
   .get('/', (context: Context) => {
     context.response.type = 'text/html';
@@ -69,7 +62,6 @@ router
     context.response.type = 'application/javascript';
     context.response.body = js;
   });
-
 
 //redis
 console.log(await redis.ping());
