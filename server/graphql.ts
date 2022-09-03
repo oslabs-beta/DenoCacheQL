@@ -4,26 +4,32 @@ import { redis } from './redis.ts';
 import { graphqlHttp } from 'https://deno.land/x/deno_graphql/oak.ts';
 const typeDefs = gql`
   type People {
+    _id: Int
     name: String
-    mass: Int
+    mass: String
     hair_color: String
     skin_color: String
     eye_color: String
     birth_year: String
     gender: String
-    species_id: Int
-    homeworld_id: Int
     height: Int
   }
   type Query {
-    getPeople: [People]
+    getPeople (characterNumber: Int): [People]
   }
 `;
 
 const resolvers = {
   Query: {
+<<<<<<< HEAD
     getPeople: async (parent: any, { id }: any, context: any, info: any) => {
       const redisKey = 'SELECT name FROM people WHERE _id=1';
+=======
+    getPeople: async (parent: any, arg: any, context: any, info: any) => {
+      console.log("arg", arg)
+      
+      const redisKey = `SELECT name FROM people WHERE _id=${arg.characterNumber}`;
+>>>>>>> dev
       //const person = await client.queryObject('SELECT * FROM people WHERE _id=1');
       //look in the cache for the provided query
       console.time();
