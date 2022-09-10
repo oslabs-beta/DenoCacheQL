@@ -1,6 +1,6 @@
 import { client } from '../server.tsx';
 import { gql } from 'https://deno.land/x/oak_graphql/mod.ts';
-import { redis } from './redis.ts';
+import { redis } from '../redis.ts';
 import { graphqlHttp } from 'https://deno.land/x/deno_graphql/oak.ts';
 
 const typeDefs = gql`
