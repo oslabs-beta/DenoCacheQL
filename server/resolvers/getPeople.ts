@@ -1,32 +1,16 @@
 import { client } from '../server.tsx';
-import { gql } from 'https://deno.land/x/oak_graphql/mod.ts';
 import { redis } from '../redis.ts';
-import { graphqlHttp } from 'https://deno.land/x/deno_graphql/oak.ts';
 
-const typeDefs = gql`
-  type People {
-    _id: Int
-    name: String
-    mass: String
-    hair_color: String
-    skin_color: String
-    eye_color: String
-    birth_year: String
-    gender: String
-    height: Int
-  }
-  type Query {
-    getPeople(characterNumber: Int): [People]
-  }
-`;
-
-const resolvers = {
+const PeopleResolver = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
 
-      console.log('arg', arg);
+      //console.log('arg', arg);
+      //console.log('context', context)
+      console.log("parent", parent)
+      console.log("info", info)
 
-      const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${arg.characterNumber}`;
+      const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${parent.characterNumber}`;
 
       //look in the cache for the provided query
       console.time();
@@ -59,6 +43,4 @@ const resolvers = {
     },
   },
 };
-
-const usePlayground = true;
-export { resolvers, typeDefs, usePlayground };
+export default PeopleResolver;

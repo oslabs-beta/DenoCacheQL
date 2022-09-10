@@ -15,5 +15,6 @@ baseRoute.get("/", (context) => {
     );
     app.use(baseRoute.routes());
     app.use(gqlrouter.routes());
+    app.use(baseRoute.allowedMethods())
     app.use(gqlrouter.allowedMethods());
   }
