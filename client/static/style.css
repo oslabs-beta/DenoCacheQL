@@ -8,7 +8,9 @@
   margin: 0 auto;
   max-width: 70%;
 }
-
+.results {
+  border: 1px solid red;
+}
 .test {
   border: 1px solid red;
 }

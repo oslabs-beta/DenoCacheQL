@@ -47,14 +47,16 @@ const App = () => {
       //take the response and push an object to queryHistory. the object will contain queryInputNumber, queryresponse, responseTime
       console.log(response);
       const jsonResponse = await response.json();
-      console.log('json---->', jsonResponse.data.getPeople[0]);
-      queryResponse = jsonResponse.data.getPeople[0];
+      console.log('json---->', jsonResponse.data);
+      console.log('getPeople---->', jsonResponse.data.getPeople[0].name);
+      queryResponse = jsonResponse.data.getPeople[0].name;
       // setQueryHistory(...queryHistory, jsonResponse.data.getPeople[0]);
+      setQueryHistory(...queryHistory, queryResponse);
+      setLoadedResults(false);
     } catch (error) {
       console.log('error--->', error);
     }
-    // setQueryHistory(...queryHistory, queryResponse);
-    // setLoadedResults(false);
+    
   };
 
   return (
@@ -62,7 +64,13 @@ const App = () => {
       <div className="app">
         <h1>rendering app.tsx</h1>
         <div className="requestForm">
-          <input type="text" onChange={e => {console.log('e --->', e); setQueryInputNumber(e.target.value)}} />
+          <input
+            type="text"
+            onChange={(e) => {
+              console.log('e --->', e);
+              setQueryInputNumber(e.target.value);
+            }}
+          />
           <button type="button" onClick={handleSubmitQuery}>
             Click Me
           </button>
@@ -72,6 +80,10 @@ const App = () => {
             })}
           </div> */}
         </div>
+      </div>
+      <div className="results">
+        <h1>Results container</h1>
+        {queryHistory}
       </div>
     </>
   );
