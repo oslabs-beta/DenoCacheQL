@@ -3,12 +3,15 @@ import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
 import { redis } from '../server/redis.ts';
+import { denoCache } from 'https://github.com/oslabs-beta/graphQL_Deno/blob/JB/Library/server/routes/graphql.ts'
+import resolvers from "./schema.ts"
+import typeDefs from "./schema.ts"
 
 const app = new Application();
 
 const PORT = 3000;
 
-const dc = new DenoCache({
+const dc = new denoCache({
   route: '/graphql',
   usePlayground: true,
   schema: { typesDefs, resolvers },
