@@ -51,12 +51,13 @@ const App = () => {
       console.log('getPeople---->', jsonResponse.data.getPeople[0].name);
       queryResponse = jsonResponse.data.getPeople[0].name;
       // setQueryHistory(...queryHistory, jsonResponse.data.getPeople[0]);
-      setQueryHistory(...queryHistory, queryResponse);
+      // await setQueryHistory(...queryHistory, queryResponse);
+      queryHistory.push(queryResponse);
+      console.log('queryHistory', queryHistory);
       setLoadedResults(false);
     } catch (error) {
       console.log('error--->', error);
     }
-    
   };
 
   return (
@@ -74,16 +75,20 @@ const App = () => {
           <button type="button" onClick={handleSubmitQuery}>
             Click Me
           </button>
-          {/* <div className="results">
-            {queryHistory.map((row, i) => {
-              <div key={i}>{row}</div>;
-            })}
-          </div> */}
         </div>
       </div>
       <div className="results">
         <h1>Results container</h1>
-        {queryHistory}
+        {/* {queryHistory} */}
+    
+        <ul>
+          {queryHistory.map((name: any, i: number) => {
+          return(
+            <li >{name}</li>
+          )
+          })}
+        </ul>
+  
       </div>
     </>
   );
