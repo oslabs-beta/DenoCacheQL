@@ -14,7 +14,7 @@ const PORT = 3000;
 const dc = new denoCache({
   route: '/graphql',
   usePlayground: true,
-  schema: { typesDefs, resolvers },
+  schema: { typeDefs, resolvers },
   redisPort: 6379,
 })
 
