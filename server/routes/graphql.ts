@@ -25,6 +25,7 @@ gqlrouter
           },
           variables || {}
         );
+        // console.log('data is...', data)
         if (data.errors) {
           context.response.body = data;
           context.response.status = 400;
