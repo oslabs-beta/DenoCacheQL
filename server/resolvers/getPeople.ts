@@ -33,7 +33,7 @@ const PeopleResolver = {
       const formatThis = await redis.get(redisKey);
       // console.timeEnd();
       console.log('format....getting from redis', formatThis);
-      arg.response.headers.set('Source', 'redis');
+      arg.response.headers.set('Source', 'cache');
 
       if (typeof formatThis !== 'string') {
         let format = JSON.stringify(formatThis);
