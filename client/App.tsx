@@ -1,34 +1,17 @@
 //import react
 import React from 'https://esm.sh/react@18.2.0';
-import ReactDOM from 'https://esm.sh/react-dom@18.2.0';
-import RequestForm from './requestForm.tsx';
 
 //main app container
 
 const App = () => {
-  const [loadedResults, setLoadedResults] = React.useState(true);
-  const [queryInputNumber, setQueryInputNumber] = React.useState<
-    string | undefined
-  >(undefined);
-  // const [queryResponse, setQueryResponse] = React.useState('');
   // const [responseTime, setResponseTime] = React.useState('');
   const [queryHistory, setQueryHistory] = React.useState([]);
-  // let queryHistoryElements = '';
-
-  // React.useEffect(() => {
-  //   console.log('in useEffect');
-  //   queryHistory.map((name: any, i: number) => {
-  //     queryHistoryElements.concat('<li>' + name + '</li>');
-  //   });
-  //   setLoadedResults(false);
-  // }, queryHistory);
 
   const handleSubmitQuery = async (e) => {
     e.preventDefault();
-    setLoadedResults(true);
-    console.dir(e);
-    console.log(e.target[0].value);
-    // console.log(queryInputNumber);
+    
+    
+
     const inputNumber: string | undefined = e.target[0].value;
     let queryResponse: string;
     // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
@@ -55,15 +38,13 @@ const App = () => {
       console.log('json---->', jsonResponse.data);
       console.log('getPeople---->', jsonResponse.data.getPeople[0].name);
       queryResponse = jsonResponse.data.getPeople[0].name;
-      // setQueryHistory(...queryHistory, jsonResponse.data.getPeople[0]);
-      // await setQueryHistory(...queryHistory, queryResponse);
-      queryHistory.push(queryResponse);
+      let tempArray = [...queryHistory, queryResponse];
+      setQueryHistory(tempArray);
       console.log('queryHistory', queryHistory);
     } catch (error) {
       console.log('error--->', error);
     }
-    setLoadedResults(false);
-    // setQueryHistory(...queryHistory, queryResponse);
+    
   };
 
   return (
@@ -79,10 +60,6 @@ const App = () => {
             <input
               id="inputNumber"
               type="text"
-              // onChange={(e) => {
-              //   console.log('e --->', e);
-              //   setQueryInputNumber(e.target.value);
-              // }}
             />
             <button type="submit">Click Me</button>
           </form>
