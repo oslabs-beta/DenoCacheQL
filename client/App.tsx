@@ -6,7 +6,7 @@ import React from 'https://esm.sh/react@18.2.0';
 // } from 'https://www.jsdelivr.com/package/npm/chart.js?path=dist';
 // import { Line } from 'https://github.com/reactchartjs/react-chartjs-2';
 //main app container
-import { Chart as ChartJS } from 'https://cdn.skypack.dev/chart.js'
+import { Chart as ChartJS } from 'https://cdn.skypack.dev/chart.js';
 //import chartJsImage from 'https://cdn.skypack.dev/chart.js-image';
 
 // import Line from 'https://cdn.skypack.dev/chart.js';
@@ -14,9 +14,7 @@ const App = () => {
   // const [responseTime, setResponseTime] = React.useState('');
   const [queryHistory, setQueryHistory] = React.useState([]);
 
-  
-
-//--------------------------------------
+  //--------------------------------------
   const handleSubmitQuery = async (e) => {
     e.preventDefault();
 
@@ -32,9 +30,7 @@ const App = () => {
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          query: `{
-            ${queryTextBox}
-          }`,
+          query: queryTextBox,
           //       query: `{
           //   getPeople (characterNumber: ${queryTextBox}){
           //     name
@@ -47,9 +43,10 @@ const App = () => {
       //take the response and push an object to queryHistory. the object will contain queryqueryTextBox, queryresponse, responseTime
       console.log(response);
       const jsonResponse = await response.json();
-      console.log('json---->', jsonResponse.data);
-      console.log('getPeople---->', jsonResponse.data.getPeople[0].name);
-      queryResponse = jsonResponse.data.getPeople[0].name;
+      console.log('json---->', jsonResponse);
+      console.log('headers ----', response.headers);
+      console.log('getPeople---->', jsonResponse.data.getPeople[0]);
+      queryResponse = JSON.stringify(jsonResponse.data.getPeople[0]);
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
       console.log('queryHistory', queryHistory);
