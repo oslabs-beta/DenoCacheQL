@@ -2,13 +2,18 @@
   border: 1px solid red;
   } */
 
+/* #query_text_box {
+  height: 300px;
+} */
 .app {
   border: 1px solid blue;
   display: block;
   margin: 0 auto;
   max-width: 70%;
 }
-
+.results {
+  border: 1px solid red;
+}
 .test {
   border: 1px solid red;
 }
