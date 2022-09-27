@@ -1,22 +1,26 @@
 import { client } from './server.tsx';
+import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
+//import buildASTSchema from "https://cdn.skypack.dev/graphql@%5E15.0.0";
+import { buildSchema, GraphQLSchema } from "https://cdn.skypack.dev/graphql@%5E15.0.0";
 
-const schema = {
-    typeDefs: `type People {
-        _id: Int
-        name: String
-        mass: String
-        hair_color: String
-        skin_color: String
-        eye_color: String
-        birth_year: String
-        gender: String
-        height: Int
-      }
+ const base = `
       type Query {
         getPeople(characterNumber: Int): [People]
-        }`,
+        }`
 
-    resolvers: {
+  const PeopleSchema = 
+  `type People {
+    _id: Int
+    name: String
+    mass: String
+    hair_color: String
+    skin_color: String
+    eye_color: String
+    birth_year: String
+    gender: String
+    height: Int
+  }`
+   const resolvers = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
       const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${arg.characterNumber}`;
@@ -30,8 +34,15 @@ const schema = {
         return character.rows
       }
     },
-  },
-};
+  };
 
-export default schema;
+  const schema = buildSchema([base, PeopleSchema].join("\n"), {});
+
+  export default { schema, resolvers}
+
+
+
+
+
+
 

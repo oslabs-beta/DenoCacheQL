@@ -1,21 +1,19 @@
 //using Oak a middleware framework for Deno
 import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
 import { redis } from '../server/redis.ts';
-import { denoCache } from 'https://github.com/oslabs-beta/graphQL_Deno/blob/JB/Library/server/routes/graphql.ts'
+import  DenoCache  from './denoCache.ts'
 import resolvers from "./schema.ts"
 import typeDefs from "./schema.ts"
+import schema from "./schema.ts"
 
 const app = new Application();
 
 const PORT = 3000;
 
-const dc = new denoCache({
+const dc = new DenoCache({
   route: '/graphql',
-  usePlayground: true,
-  schema: { typeDefs, resolvers },
-  redisPort: 6379,
+  schema: schema,
 })
 
 //redis
