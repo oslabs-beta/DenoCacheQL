@@ -36,9 +36,9 @@ import { buildSchema, GraphQLSchema } from "https://cdn.skypack.dev/graphql@%5E1
     },
   };
 
-  
-  const schema = buildSchema([base, PeopleSchema].join("\n"), {});
-
+  const schema = makeExecutableSchema({typeDefs:[base, PeopleSchema].join("\n"), resolvers: resolvers || {}})
+  // const schema = buildSchema([base, PeopleSchema].join("\n"), {});
+console.log(schema)
   export default {schema, resolvers}
 
 

@@ -7,10 +7,8 @@ import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mo
 import PeopleSchema from "./schema.ts";
 import schema from "./schema.ts"
 import resolvers from "./schema.ts";
-import { graphql } from "https://cdn.skypack.dev/graphql@%5E15.0.0";
+import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 // import resolvers from "../resolvers/index.ts";
-
-
 
 export default class DenoCache {
   schema: any;
@@ -37,9 +35,9 @@ export default class DenoCache {
         const { query, variables } = await request.body().value;
         // resolve GraphQL query
         const graphqlResults = await graphql({
-          schema:schema.schema,
+          schema: schema.schema,
           source: query,
-          rootValue: schema.resolvers,
+          // rootValue: schema.resolvers,
           // pass DenoStore instance through context to use methods in resolvers
           // contextValue: { dc : this },
           variableValues: variables,
