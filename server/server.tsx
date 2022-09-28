@@ -26,10 +26,13 @@ const js = `import React from "https://esm.sh/react@18.2.0";
 const html = `<html>
     <head>
       <link rel="stylesheet" type="text/css" href="/static/style.css">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
       </head>
       <body>
       <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
       <script type="module" src="${jsBundle}"></script>
+      <script type="module" src="${jsBundle}"></script>
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     </body>
   </html>`;
 
@@ -52,6 +55,12 @@ const databaseURL =
 const client = new Client(databaseURL);
 await client.connect();
 
+app.use(async (ctx, next) => {
+  const start = Date.now();
+  await next();
+  const ms = Date.now() - start;
+  ctx.response.headers.set('X-Response-Time', `${ms}ms`);
+});
 
 app.use(staticFiles('/client/'));
 app.use(router.routes());

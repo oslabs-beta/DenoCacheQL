@@ -1,19 +1,64 @@
-/* body {
-  border: 1px solid red;
-  } */
+h2 {
+  font-size: 26px;
+}
 
-/* #query_text_box {
-  height: 300px;
-} */
-.app {
-  border: 1px solid blue;
-  display: block;
+#app {
+  /* border: 1px solid blue; */
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
-  max-width: 70%;
+  padding: 30px;
+  /* max-width: 70%; */
+  min-width: max-content;
+  
 }
-.results {
-  border: 1px solid red;
+#topContainer, #bottomContainer {
+  margin: 10px; 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
 }
-.test {
-  border: 1px solid red;
+#topContainer {
+  /* border: 1px solid green; */
+  gap: 5px;
+  
+}
+#topContainer textarea {
+  height: 90%;
+  width: 98%;
+  border: 1px solid rgb(158, 185, 195);
+  border-radius: 4px;
+  outline: none;
+  overflow: auto;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  padding: 30px; 
+}
+#requestForm,
+#results {
+  border: 1px solid rgba(55, 0, 255, 0.23);
+  border-radius: 4px;
+  padding: 18px;
+  /* min-width: 40%; */
+  width: 48%;
+  height: 50vh;
+  background-color: rgba(240, 248, 255, 0.451);
+}
+
+#requestForm button {
+  float: right;
+  margin-top: 10px;
+  background-color: #171d9b ;
+  border-radius: 8px;
+  color: white;
+}
+
+#queryResponse{
+  border: 1px solid rgba(55, 0, 255, 0.23);
+  border-radius: 4px;
+
+}
+#bottomContainer {
+  border: 1px solid pink;
 }
