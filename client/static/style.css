@@ -1,3 +1,19 @@
+.first-color { 
+	background: #22559c; 
+}
+	
+.second-color { 
+	background: #f27370; 
+}
+
+.third-color { 
+	background: #fa9856; 
+}
+
+.fourth-color { 
+	background: #ede862; 
+}
+
 h2 {
   font-size: 26px;
 }
