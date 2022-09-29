@@ -38,15 +38,7 @@ export default class DenoCache {
   routes(): any {
     //serving our graphql IDE
 
-    const html = `<html>
-<head>
-  <link rel="stylesheet" type="text/css" href="/static/style.css">
-  </head>
-  <body>
-  <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
-  <script type="module" src="${jsBundle}"></script>
-</body>
-</html>`;
+
 
     const jsBundle = '/main.js';
     const js = `import React from "https://esm.sh/react@18.2.0";
@@ -54,13 +46,21 @@ export default class DenoCache {
     const App = ${App};
     ReactDOM.hydrate(React.createElement(App), document.getElementById('app'));`;
 
+    const html = `<html>
+          <head>
+            <link rel="stylesheet" type="text/css" href="/static/style.css">
+            </head>
+            <body>
+            <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
+            <script type="module" src="${jsBundle}"></script>
+          </body>
+          </html>`;
 
-
-    this.router.get(this.route, (context) => {
+    this.router.get(this.route, (context: Context) => {
       context.response.type = 'text/html';
       context.response.body = html;
   })
-  this.router.get(jsBundle, (context) => {
+  this.router.get(jsBundle, (context: Context) => {
     context.response.type = 'application/javascript';
     context.response.body = js;
           })
@@ -93,4 +93,6 @@ export default class DenoCache {
   allowedMethods(): any {
     return this.router.allowedMethods();
   }
+
+  this.router.use(staticFiles('/client/'))
 }
