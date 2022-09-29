@@ -9,7 +9,7 @@ h2 {
   margin: 0 auto;
   padding: 30px;
   /* max-width: 70%; */
-  min-width: max-content;
+  min-width: fit-content;
   
 }
 #topContainer, #bottomContainer {
@@ -31,6 +31,7 @@ h2 {
   border-radius: 4px;
   outline: none;
   overflow: auto;
+  overflow-wrap: break-word;
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   padding: 30px; 
@@ -56,9 +57,31 @@ h2 {
 
 #queryResponse{
   border: 1px solid rgba(55, 0, 255, 0.23);
+  background-color: rgb(255, 255, 255);
+  padding: 30px;
   border-radius: 4px;
-
+  height: 40vh;
+  overflow-wrap: break-word;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 #bottomContainer {
-  border: 1px solid pink;
+  border: 1px solid rgba(55, 0, 255, 0.23);
+}
+
+/* table {
+  width: fit-content;
+} */
+#tableResponse {
+  overflow-wrap: break-word;
+  width: 70%;
+}
+
+#tableSource,#tableTime{
+  text-align: center;
+}
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+	/* background-color: rgba(101, 179, 248, 0.268); */
+  background-color: #d0e7fc;
 }

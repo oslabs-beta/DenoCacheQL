@@ -14,7 +14,8 @@ import {Graph} from 'https://deno.land/x/deno_chart/mod.ts';
 
 
 const App = () => {
-  const [queryHistory, setQueryHistory] = React.useState([]);
+  let displayResponse;
+    const [queryHistory, setQueryHistory] = React.useState([]);
   const [chartData, setChartData] = React.useState({
     dataSets: [],
   });
@@ -109,6 +110,8 @@ const App = () => {
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
+      displayResponse = jsonResponse.data.getPeople[0];
+      console.log(displayResponse);
       queryResponse.response = jsonResponse.data.getPeople[0];
       queryResponse.source = response.headers.get('source');
       queryResponse.time = response.headers.get('x-response-time');
@@ -144,28 +147,33 @@ const App = () => {
             </form>
           </div>
           <div id="results">
-            <h2>Response</h2>
-            <div id="queryResponse">
+            
+            <div className ='form-control' id="queryResponse" >
+              <p>Response</p>
               {JSON.stringify(queryHistory[queryHistory.length - 1])}
             </div>
           </div>
         </div>
         <div id="bottomContainer">
          <table className="table table-striped">
+          <thead>
             <tr>
               <th>response</th>
               <th>source</th>
               <th>response time</th>
             </tr>
-            {queryHistory.map((name: any, i: number) => {
+            </thead>
+            <tbody>
+            {queryHistory.map((historyItem: any, i: number) => {
               return (
-                <>
-                  <td>{JSON.stringify(name.response)}</td>
-                  <td>{JSON.stringify(name.source)}</td>
-                  <td>{JSON.stringify(name.time)}</td>
-                </>
+                <tr>
+                  <td id="tableResponse">{JSON.stringify(historyItem.response)}</td>
+                  <td id="tableSource">{historyItem.source}</td>
+                  <td id="tableTime">{historyItem.time}</td>
+                </tr>
               );
             })}
+            </tbody>
           </table>
           <div id='chart'>
             <img src="../image.png" />
@@ -174,6 +182,5 @@ const App = () => {
     </>
   );
 }
-
 
 export default App;
