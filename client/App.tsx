@@ -106,6 +106,7 @@ const App = () => {
       queryResponse.response = jsonResponse.data.getPeople[0];
       queryResponse.source = response.headers.get('source');
       queryResponse.time = response.headers.get('x-response-time');
+
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
     } catch (error) {
