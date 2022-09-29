@@ -148,7 +148,7 @@ const App = () => {
         </div>
       </div>
       <div id="bottomContainer">
-        <table className="table table-striped table-dark">
+        <table className="table">
           <thead>
             <tr>
               <th>response</th>

@@ -1,17 +1,17 @@
-.first-color { 
-	background: #2d095c; 
-}
-	
-.second-color { 
-	background: #20366b; 
+.first-color {
+  background: #2d095c;
 }
 
-.third-color { 
-	background: #dd7777; 
+.second-color {
+  background: #20366b;
 }
 
-.fourth-color { 
-	background: #eae3e3; 
+.third-color {
+  background: #dd7777;
+}
+
+.fourth-color {
+  background: #eae3e3;
 }
 /* --------------------------------- */
 .first-color {
@@ -84,7 +84,7 @@ h2 {
   gap: 5px;
   padding: 0;
 }
- 
+
 #topContainer textarea {
   height: 90%;
   width: 98%;
@@ -114,7 +114,7 @@ h2 {
 #requestForm button {
   float: right;
   margin-top: 7px;
- 
+
   /* background-color: #171d9b; */
   background-color: #48395c;
   border-radius: 9px;
@@ -141,14 +141,23 @@ h2 {
 }
 table {
   text-align: center;
-  background-color: #f0fbff;
+  background-color: #20366b;
 }
 /* #timeHeader, #sourceHeader, #tableSource, #tableTime{
   text-align: center;
 } */
 
-.table-striped > tbody > tr:nth-child(odd) > td,
+/* .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
   /* background-color: rgba(101, 179, 248, 0.268); */
   /* background-color: #ffffff; */
+} */
+tr {
+  border-bottom: 1px solid #ddd;
+}
+tr:hover {
+  background-color: #d6eeee;
+}
+tr:nth-child(even) {
+  background-color: #2b4a92;
 }
