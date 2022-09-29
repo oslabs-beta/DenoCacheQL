@@ -57,7 +57,7 @@ h2 {
 
 #queryResponse{
   border: 1px solid rgba(55, 0, 255, 0.23);
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
   padding: 30px;
   border-radius: 4px;
   height: 40vh;
@@ -69,17 +69,18 @@ h2 {
   border: 1px solid rgba(55, 0, 255, 0.23);
 }
 
-/* table {
-  width: fit-content;
-} */
+
 #tableResponse {
   overflow-wrap: break-word;
   width: 70%;
 }
-
-#tableSource,#tableTime{
+table {
   text-align: center;
 }
+/* #timeHeader, #sourceHeader, #tableSource, #tableTime{
+  text-align: center;
+} */
+
 .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
 	/* background-color: rgba(101, 179, 248, 0.268); */

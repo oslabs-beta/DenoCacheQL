@@ -148,7 +148,7 @@ const App = () => {
           </div>
           <div id="results">
             
-            <div className ='form-control' id="queryResponse" >
+            <div id="queryResponse" >
               <p>Response</p>
               {JSON.stringify(queryHistory[queryHistory.length - 1])}
             </div>
@@ -159,8 +159,8 @@ const App = () => {
           <thead>
             <tr>
               <th>response</th>
-              <th>source</th>
-              <th>response time</th>
+              <th id="sourceHeader">source</th>
+              <th id="timeHeader">response time</th>
             </tr>
             </thead>
             <tbody>
