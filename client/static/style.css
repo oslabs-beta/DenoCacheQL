@@ -141,7 +141,8 @@ h2 {
 }
 table {
   text-align: center;
-  background-color: #20366b;
+  background-color: #69777c;
+  color: white;
 }
 /* #timeHeader, #sourceHeader, #tableSource, #tableTime{
   text-align: center;
