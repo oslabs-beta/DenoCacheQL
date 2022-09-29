@@ -1,40 +1,52 @@
 import { Router, Context } from "https://deno.land/x/oak@v10.6.0/mod.ts"
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
-import typeDefs from "./schema.ts";
-import resolvers from "./schema.ts";
+// import typeDefs from "./schema.ts";
+// import resolvers from "./schema.ts";
 import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
+// import resolvers from "./schema.ts"
+// import typeDefs from "./schema.ts"
 
 
-// const html = `<html>
-// <head>
-//   <link rel="stylesheet" type="text/css" href="/static/style.css">
-//   </head>
-//   <body>
-//   <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
-//   <script type="module" src="${jsBundle}"></script>
-// </body>
-// </html>`;
+
+
 
 export default class DenoCache {
-  schema: any;
   router: Router;
   route: string;
+  typeDefs: any;
+  resolvers: any;
+  schema: any;
 
   constructor(args: any) {
-    this.setSchema();
-    this.router = new Router();
-    this.route = '/graphql';
+   const {
+    typeDefs,
+    resolvers,
+   } =args
+
+   this.setSchema(typeDefs, resolvers);
+   this.router = new Router();
+   this.route = '/graphql';
   }
  
-  setSchema(): any {
-      this.schema = makeExecutableSchema({typeDefs: typeDefs.typeDefs, resolvers: resolvers.resolvers || {}})
+  setSchema(typeDefs, resolvers): any {
+    this.schema = makeExecutableSchema({typeDefs: typeDefs.typeDefs, resolvers: resolvers.resolvers || {}})
   }
 
   routes(): any {
     //serving our graphql IDE
+
+    const html = `<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  </head>
+  <body>
+  <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
+  <script type="module" src="${jsBundle}"></script>
+</body>
+</html>`;
 
     const jsBundle = '/main.js';
     const js = `import React from "https://esm.sh/react@18.2.0";
@@ -55,6 +67,7 @@ export default class DenoCache {
 
     //graphql post request
     this.router.post(this.route, async (ctx) => {
+
       const { response, request } = ctx;
 
       try {

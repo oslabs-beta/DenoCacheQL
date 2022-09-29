@@ -12,8 +12,9 @@ const app = new Application();
 const PORT = 3000;
 
 const dc = new DenoCache({
-  route: '/graphql',
-  schema: schema,
+  //route: '/graphql',
+  typeDefs,
+  resolvers
 })
 
 //redis
