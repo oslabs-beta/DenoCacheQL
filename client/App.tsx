@@ -170,9 +170,6 @@ const App = () => {
             })}
           </tbody>
         </table>
-        {/* <div id="chart">
-            <img src="../image.png" />
-          </div> */}
       </div>
     </>
   );
