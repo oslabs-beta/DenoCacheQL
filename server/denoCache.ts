@@ -37,9 +37,6 @@ export default class DenoCache {
 
   async redisConnect(redisInfo): any {
      this.redis = await connect(redisInfo)
-     //console.log(redisInfo)
-    // console.log("REDIS PING",this.redis.ping())
-    // console.log("Redis", this.redis)
   }
 
   setSchema(typeDefs, resolvers): any {
