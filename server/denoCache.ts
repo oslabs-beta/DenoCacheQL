@@ -7,6 +7,7 @@ import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 //import { redis } from '../server/redis.ts';
 // import resolvers from "./schema.ts"
 // import typeDefs from "./schema.ts"
@@ -21,6 +22,7 @@ export default class DenoCache {
   js: any;
   html: any;
   redis: any
+  //app.use(staticFiles('/client/'));
 
   constructor(args: any) {
    const {
@@ -33,6 +35,8 @@ export default class DenoCache {
    this.router = new Router();
    this.route = '/graphql';
    this.redisConnect(redisInfo)
+   this.allowedMethods()
+   this.serveStatic()
   }
 
   async redisConnect(redisInfo): any {
@@ -64,9 +68,6 @@ export default class DenoCache {
        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     </body>
   </html>`;
-
-
-
 
 
     this.router.get(this.route, (context) => {
@@ -133,5 +134,11 @@ export default class DenoCache {
 
   allowedMethods(): any {
     return this.router.allowedMethods();
+  }
+    //app.use(staticFiles('/client/'));
+
+  serveStatic(): any {
+    //console.log("hello")
+    return this.router.use(staticFiles('/client/'))
   }
 }

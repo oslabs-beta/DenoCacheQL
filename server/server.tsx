@@ -5,6 +5,7 @@ import {
   Router,
 } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
+import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
 //import { redis } from '../server/redis.ts';
 import  DenoCache  from './denoCache.ts'
 import resolvers from "./schema.ts"
@@ -60,6 +61,7 @@ app.use(router.routes());
 
 app.use(dc.routes());
 app.use(dc.allowedMethods());
+//app.use(dc.staticFiles('/client'))
 
 //checking server connection
 
