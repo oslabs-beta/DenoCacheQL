@@ -6,6 +6,7 @@ import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
+import { redis } from '../server/redis.ts';
 // import resolvers from "./schema.ts"
 // import typeDefs from "./schema.ts"
 
@@ -36,22 +37,47 @@ export default class DenoCache {
 
   routes(): any {
     this.router.post(this.route, async (ctx) => {
-
       const { response, request } = ctx;
       const start = Date.now()
       try {
         const { query, variables } = await request.body().value;
-        const results= await graphql({
-          schema: this.schema,
-          source: query,
-          variableValues: variables,
-          contextValue: {response, request}
-        });
-        response.status = results.errors ? 500 : 200;
-        response.body = results;
-        const end = Date.now() - start;
-        response.headers.set("X-Response-Time", `${end}ms`)
-        return;
+        const redisKey = JSON.stringify(query);
+        const data = await redis.exists(redisKey)
+        if (data) {
+          const formatThis = await redis.get(redisKey);
+          response.headers.set('Source', 'cache');
+          if (typeof formatThis !== 'string') {
+            let format = JSON.stringify(formatThis);
+            let formattedResponse = JSON.parse(format)
+            response.status = 200;
+            response.body = formattedResponse;
+            const end = Date.now() - start;
+            response.headers.set("X-Response-Time", `${end}ms`)
+            return;
+          } else {
+            let formattedResponse = JSON.parse(formatThis)
+            response.status = 200;
+            response.body = formattedResponse;
+            const end = Date.now() - start;
+            response.headers.set("X-Response-Time", `${end}ms`)
+            return;
+          }
+        } else {
+          const results= await graphql({
+            schema: this.schema,
+            source: query,
+            variableValues: variables,
+            contextValue: {response, request}
+          });
+          await redis.set(redisKey, JSON.stringify(results))
+          response.status = results.errors ? 500 : 200;
+          response.body = results;
+          const end = Date.now() - start;
+          response.headers.set("Source", "database")
+          response.headers.set("X-Response-Time", `${end}ms`)
+          return;
+        }
+        
 
       } catch (err) {
         console.error(`${err}`);
