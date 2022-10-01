@@ -9,16 +9,15 @@ import { React } from '../deps.ts';
 // import resolvers from "./schema.ts"
 // import typeDefs from "./schema.ts"
 
-
-
-
-
 export default class DenoCache {
   router: Router;
   route: string;
   typeDefs: any;
   resolvers: any;
   schema: any;
+  jsBundle: any;
+  js: any;
+  html: any;
 
   constructor(args: any) {
    const {
@@ -36,36 +35,6 @@ export default class DenoCache {
   }
 
   routes(): any {
-    //serving our graphql IDE
-
-
-
-    const jsBundle = '/main.js';
-    const js = `import React from "https://esm.sh/react@18.2.0";
-    import ReactDOM from "https://esm.sh/react-dom@18.2.0";
-    const App = ${App};
-    ReactDOM.hydrate(React.createElement(App), document.getElementById('app'));`;
-
-    const html = `<html>
-          <head>
-            <link rel="stylesheet" type="text/css" href="/static/style.css">
-            </head>
-            <body>
-            <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
-            <script type="module" src="${jsBundle}"></script>
-          </body>
-          </html>`;
-
-    this.router.get(this.route, (context: Context) => {
-      context.response.type = 'text/html';
-      context.response.body = html;
-  })
-  this.router.get(jsBundle, (context: Context) => {
-    context.response.type = 'application/javascript';
-    context.response.body = js;
-          })
-
-    //graphql post request
     this.router.post(this.route, async (ctx) => {
 
       const { response, request } = ctx;
@@ -93,6 +62,4 @@ export default class DenoCache {
   allowedMethods(): any {
     return this.router.allowedMethods();
   }
-
-  this.router.use(staticFiles('/client/'))
 }
