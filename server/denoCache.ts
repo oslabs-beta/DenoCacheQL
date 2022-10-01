@@ -6,7 +6,8 @@ import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
-import { redis } from '../server/redis.ts';
+import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+//import { redis } from '../server/redis.ts';
 // import resolvers from "./schema.ts"
 // import typeDefs from "./schema.ts"
 
@@ -19,18 +20,28 @@ export default class DenoCache {
   jsBundle: any;
   js: any;
   html: any;
+  redis: any
 
   constructor(args: any) {
    const {
     typeDefs,
     resolvers,
+    redisInfo,
    } =args
 
    this.setSchema(typeDefs, resolvers);
    this.router = new Router();
    this.route = '/graphql';
+   this.redisConnect(redisInfo)
   }
- 
+
+  async redisConnect(redisInfo): any {
+     this.redis = await connect(redisInfo)
+     //console.log(redisInfo)
+    // console.log("REDIS PING",this.redis.ping())
+    // console.log("Redis", this.redis)
+  }
+
   setSchema(typeDefs, resolvers): any {
     this.schema = makeExecutableSchema({typeDefs: typeDefs.typeDefs, resolvers: resolvers.resolvers || {}})
   }
@@ -42,9 +53,9 @@ export default class DenoCache {
       try {
         const { query, variables } = await request.body().value;
         const redisKey = JSON.stringify(query);
-        const data = await redis.exists(redisKey)
+        const data = await this.redis.exists(redisKey)
         if (data) {
-          const formatThis = await redis.get(redisKey);
+          const formatThis = await this.redis.get(redisKey);
           response.headers.set('Source', 'cache');
           if (typeof formatThis !== 'string') {
             let format = JSON.stringify(formatThis);
@@ -69,7 +80,7 @@ export default class DenoCache {
             variableValues: variables,
             contextValue: {response, request}
           });
-          await redis.set(redisKey, JSON.stringify(results))
+          await this.redis.set(redisKey, JSON.stringify(results))
           response.status = results.errors ? 500 : 200;
           response.body = results;
           const end = Date.now() - start;
