@@ -38,16 +38,19 @@ export default class DenoCache {
     this.router.post(this.route, async (ctx) => {
 
       const { response, request } = ctx;
-
+      const start = Date.now()
       try {
         const { query, variables } = await request.body().value;
         const results= await graphql({
           schema: this.schema,
           source: query,
           variableValues: variables,
+          contextValue: {response, request}
         });
         response.status = results.errors ? 500 : 200;
         response.body = results;
+        const end = Date.now() - start;
+        response.headers.set("X-Response-Time", `${end}ms`)
         return;
 
       } catch (err) {

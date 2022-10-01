@@ -31,10 +31,10 @@ import { buildSchema, GraphQLSchema } from "https://cdn.skypack.dev/graphql@%5E1
         console.log('in the query')
         const character = await client.queryObject<string>(redisKey);
         console.log('Character.rows', character.rows);
+        context.response.headers.set('Source', 'database')
         //then save the query and the response as the key value pair in redis
-     
+        
         // //return the responsect
-        console.timeEnd();
         return character.rows
       }
     },
