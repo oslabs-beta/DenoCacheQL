@@ -169,6 +169,9 @@ const App = () => {
           <div id="queryResponse">
             <p>Response</p>
             {JSON.stringify(queryHistory[queryHistory.length - 1])}
+            {/* {
+for (const [key, value] of Object.entries(object1)) {
+  console.log(`${key}: ${value}`);} */}
           </div>
         </div>
       </div>
@@ -183,12 +186,24 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
+            {/* {queryHistory.map((historyItem:any, i)=>{
+              for (const [key, value] of Object.entries(historyItem)){
+                return (<td>`${key}: ${value}`</td>)
+              }
+            })} */}
             {queryHistory.map((historyItem: any, i: number) => {
+              console.log(Object.entries(historyItem.response));
+              let displayResponse='';
+              for (const [key, value] of Object.entries(historyItem.response)) {
+                displayResponse += `${key}: ${value} \n`;
+              }
               return (
                 <tr>
-                  <td id='queryNumber'>{i+1}</td>
+                  <td id="queryNumber">{i + 1}</td>
                   <td id="tableResponse">
-                    {JSON.stringify(historyItem.response)}
+                    {/* {JSON.stringify(historyItem.response)} */}
+                    {/* {Object.entries(historyItem.response)} */}
+                    {displayResponse}
                   </td>
                   <td id="tableSource">{historyItem.source}</td>
                   <td id="tableTime">{historyItem.time}</td>
