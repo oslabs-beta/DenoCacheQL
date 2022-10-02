@@ -1,75 +1,77 @@
 import {
   React,
+  ReactDOM,
   //d34Deno,
-  useEffect,
-  useRef,
-  createGraph,
 } from '../deps.ts';
-//import { Graph, Select } from "https://deno.land/x/d3_4_deno@v6.2.0.9/src/mod.js";
-import * as d34Deno from 'https://deno.land/x/d3_4_deno@v6.2.0.9/src/mod.js';
-//import * as d34Deno from "https://deno.land/x/d3_4_deno@v6.2.0.1/src/d3-select/mod.js";
-//import * as d34Deno from "https://deno.land/x/d3_4_deno@v6.2.0/src/d3-selection/mod.js";
-import { Graph } from 'https://deno.land/x/deno_chart/mod.ts';
+
+import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+
 
 const App = () => {
   let displayResponse;
   const [queryHistory, setQueryHistory] = React.useState([]);
-  const [chartData, setChartData] = React.useState({
-    dataSets: [],
-  });
 
-  const BarChart = () => {
-    // const graph =  createGraph("https://deno.land/x/std/testing/asserts.ts");
-    // console.log(graph.toString());
-
-    /* The useRef Hook creates a variable that "holds on" to a value across rendering
-         passes. In this case it will hold our component's SVG DOM element. It's
-         initialized null and React will assign it later (see the return statement) */
-    //
-
-    const graph = new Graph({
-      titleText: 'Uptime',
-      xAxisText: 'Hours',
-      yAxisText: 'Day',
-
-      backgroundColor: {
-        r: 0,
-        g: 0,
-        b: 0,
-        a: 0.75,
+  const RenderGraph = () => {
+    const ctx = document.getElementById('myChart');
+    
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [
+          {
+            label: 'My First Dataset',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+          },
+        ],
       },
-
-      yMax: 50,
-      bar_width: 25,
-      graphSegments_X: 18,
-
-      xTextColor: 'rgba(255,255,255,1)',
-      xSegmentColor: 'rgba(255,255,255,0.5)',
-      yTextColor: 'rgba(255,255,255,1)',
-      ySegmentColor: 'rgba(255,255,255,0.5)',
-
-      // Verbose Logging (Optional)
-      verbose: true,
     });
+    // const myChart = new Chart(ctx, {
+    //   type: 'bar',
+    //   data: {
+    //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    //     datasets: [
+    //       {
+    //         label: '# of Votes',
+    //         data: [12, 19, 3, 5, 2, 3],
+    //         backgroundColor: [
+    //           'rgba(255, 99, 132, 0.2)',
+    //           'rgba(54, 162, 235, 0.2)',
+    //           'rgba(255, 206, 86, 0.2)',
+    //           'rgba(75, 192, 192, 0.2)',
+    //           'rgba(153, 102, 255, 0.2)',
+    //           'rgba(255, 159, 64, 0.2)',
+    //         ],
+    //         borderColor: [
+    //           'rgba(255, 99, 132, 1)',
+    //           'rgba(54, 162, 235, 1)',
+    //           'rgba(255, 206, 86, 1)',
+    //           'rgba(75, 192, 192, 1)',
+    //           'rgba(153, 102, 255, 1)',
+    //           'rgba(255, 159, 64, 1)',
+    //         ],
+    //         borderWidth: 1,
+    //       },
+    //     ],
+    //   },
+    //   options: {
+    //     scales: {
+    //       y: {
+    //         beginAtZero: true,
+    //       },
+    //     },
+    //   },
+    // });
 
-    // Random Bar Generation with Colors!
-    const COLORS = ['#345C7D', '#F7B094', '#F5717F', '#F7B094', '#6C5B7A'];
+    // return (
+    //   <>
 
-    for (let i = 0; i < 12; i++) {
-      const clr = COLORS[Math.floor(Math.random() * COLORS.length)];
-      const y = Math.floor(Math.random() * 50);
-
-      graph.add({
-        val: y,
-        label: (i + 1).toString(),
-        color: clr,
-      });
-    }
-
-    // Draw to Canvas Context & Save png image
-    graph.draw();
-    graph.save('image.png');
-    console.log(graph);
+    //     <div id="graph">This should be a picture of a graph!</div>
+    //   </>
+    // );
   };
 
   //--------------------------------------
@@ -78,8 +80,6 @@ const App = () => {
 
     const queryTextBox: string | undefined = e.target[0].value;
     let queryResponse: object = { response: null, source: null, time: null };
-
-    // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
 
     //submit request, sending user's query in the request body
     try {
@@ -171,6 +171,10 @@ const App = () => {
             })}
           </tbody>
         </table>
+
+        <React.Suspense>
+          <RenderGraph />
+        </React.Suspense>
       </div>
     </>
   );

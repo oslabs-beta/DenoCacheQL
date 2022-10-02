@@ -14,7 +14,7 @@ import schema from './schema.ts';
 const app = new Application();
 const router = new Router();
 
-const PORT = 3000;
+const PORT = 8080;
 
 const dc = new DenoCache({
   //route: '/graphql',
