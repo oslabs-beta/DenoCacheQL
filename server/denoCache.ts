@@ -40,9 +40,7 @@ export default class DenoCache {
     const App = ${App};
     ReactDOM.hydrateRoot(document.getElementById('app'), React.createElement(${App}));`;
 
-    const appHtml = ReactDOMServer.renderToReadableStream(
-      React.createElement(App)
-    );
+    const appHtml = ReactDOMServer.renderToString(React.createElement(App));
 
     const html = `
     <!DOCTYPE html>
@@ -79,15 +77,16 @@ h2 {
   flex-direction: row;
   justify-content: center;
   width: 100%;
-}
-
-#topContainer {
+  height: fit-contents;
   gap: 5px;
   padding: 0;
+  padding-right: 10px;
 }
 
+
+
 #topContainer textarea {
-  height: 90%;
+  height: 250px;
   width: 98%;
   border: 1px solid rgb(158, 185, 195);
   border-radius: 4px;
@@ -104,7 +103,7 @@ h2 {
   border-radius: 4px;
   padding: 18px;
   width: 50%;
-  height: 50vh;
+  height: fit-contents;
   background-color: #eae3e3;
 }
 
@@ -120,7 +119,7 @@ h2 {
   border: 1px solid rgba(55, 0, 255, 0.23);
   padding: 30px;
   border-radius: 4px;
-  height: 40vh;
+  height: 250px;
   overflow-wrap: break-word;
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
@@ -135,6 +134,8 @@ h2 {
 }
 table {
   text-align: center;
+  overflow: auto;
+  height: 200px;
 }
 
 .table-striped > tbody > tr:nth-child(odd) > td,
@@ -145,10 +146,11 @@ canvas {
   max-width: 50%;
   display: block;
   margin: 0 auto;
+  background-color: #ffffff;
 }
 </style>
       <div id="app">${appHtml}</div>
-         <canvas id="myChart" width="400" height="400"></canvas> 
+         
       <script type="module" src="${jsBundle}"></script>
        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     </body>
