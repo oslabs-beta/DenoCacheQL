@@ -6,28 +6,49 @@ import {
 
 import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
 
-
 const App = () => {
   let displayResponse;
   const [queryHistory, setQueryHistory] = React.useState([]);
+  const [responseTimes, setResponseTimes] = React.useState([]);
 
-  const RenderGraph = () => {
+  const RenderGraph = (data) => {
+    const { responseTimes } = data;
+    console.log('response times data', responseTimes);
+    let graphLabels = [];
+    responseTimes.map((el, i) => {
+      graphLabels.push(i + 1);
+    });
+
+    let chartStatus = Chart.getChart('myChart'); // <canvas> id
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+    }
     const ctx = document.getElementById('myChart');
-    
+
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: graphLabels,
         datasets: [
           {
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
+            label: 'Response Times',
+            data: responseTimes,
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
+            yAxisID: 'Queries',
           },
         ],
       },
+      // options: {
+      //   scales: {
+      //     xAxis: {
+      //       // The axis for this scale is determined from the first letter of the id as `'x'`
+      //       // It is recommended to specify `position` and / or `axis` explicitly.
+      //       type: 'time',
+      //     },
+      //   },
+      // },
     });
     // const myChart = new Chart(ctx, {
     //   type: 'bar',
@@ -109,6 +130,9 @@ const App = () => {
 
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
+      let tempResponseTimes = [...responseTimes, queryResponse.time];
+      setResponseTimes(tempResponseTimes);
+      console.log('responsetimes-----', responseTimes);
     } catch (error) {
       console.log('error--->', error);
     }
@@ -152,15 +176,17 @@ const App = () => {
         <table className="table table-dark">
           <thead>
             <tr>
+              <th>Query #</th>
               <th>response</th>
               <th id="sourceHeader">source</th>
-              <th id="timeHeader">response time</th>
+              <th id="timeHeader">response time (ms)</th>
             </tr>
           </thead>
           <tbody>
             {queryHistory.map((historyItem: any, i: number) => {
               return (
                 <tr>
+                  <td id='queryNumber'>{i+1}</td>
                   <td id="tableResponse">
                     {JSON.stringify(historyItem.response)}
                   </td>
@@ -173,7 +199,7 @@ const App = () => {
         </table>
 
         <React.Suspense>
-          <RenderGraph />
+          <RenderGraph responseTimes={responseTimes} />
         </React.Suspense>
       </div>
     </>

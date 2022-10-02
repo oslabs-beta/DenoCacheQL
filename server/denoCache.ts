@@ -178,7 +178,7 @@ canvas {
         response.status = results.errors ? 500 : 200;
         response.body = results;
         const end = Date.now() - start;
-        response.headers.set('X-Response-Time', `${end}ms`);
+        response.headers.set('X-Response-Time', end);
         return;
       } catch (err) {
         console.error(`${err}`);
