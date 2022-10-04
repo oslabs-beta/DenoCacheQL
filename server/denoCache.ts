@@ -1,15 +1,11 @@
 import { Router, Context } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
-// import typeDefs from "./schema.ts";
-// import resolvers from "./schema.ts";
 import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
-//import { redis } from '../server/redis.ts';
-// import resolvers from "./schema.ts"
-// import typeDefs from "./schema.ts"
+
 
 export default class DenoCache {
   router: Router;
@@ -21,7 +17,6 @@ export default class DenoCache {
   js: any;
   html: any;
   redis: any
-  //app.use(staticFiles('/client/'));
 
   constructor(args: any) {
    const {
@@ -35,6 +30,7 @@ export default class DenoCache {
    this.route = '/graphql';
    this.redisConnect(redisInfo)
    this.allowedMethods()
+   this.cache();
   }
 
   async redisConnect(redisInfo): any {
@@ -100,8 +96,6 @@ export default class DenoCache {
       padding: 0;
       padding-right: 10px;
       }
-
-
 
       #topContainer textarea {
       height: 250px;
@@ -200,7 +194,7 @@ export default class DenoCache {
             response.status = 200;
             response.body = formattedResponse;
             const end = Date.now() - start;
-            response.headers.set("X-Response-Time", `${end}ms`)
+            response.headers.set("X-Response-Time", end)
             return;
           } else {
             let formattedResponse = JSON.parse(formatThis)
@@ -215,7 +209,7 @@ export default class DenoCache {
             schema: this.schema,
             source: query,
             variableValues: variables,
-            contextValue: {response, request}
+            contextValue: {response, request, dc:this},
           });
           await this.redis.set(redisKey, JSON.stringify(results))
           response.status = results.errors ? 500 : 200;
@@ -238,4 +232,20 @@ export default class DenoCache {
   allowedMethods(): any {
     return this.router.allowedMethods();
   }
+
+  async cache(args: any, callback: Function) { 
+    //check redis for cached value
+    console.log('arg', args)
+    console.log('callback', callback)
+    //console.log('info', info.fieldName)
+    // const redisKey = 
+    // { characterNumber: 61 }
+    // const res = await callback();
+    const res = 'test'
+    // console.log('res', res);
+    return res;
+
+  }
+
+
 }
