@@ -8,6 +8,9 @@ const App = () => {
 
   //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
+  const [chartData, setChartData] = React.useState({
+    dataSets: [],
+  });
 
   //array of times, which is passed to the RenderGraph component to chart the response times
   const [responseTimes, setResponseTimes] = React.useState([]);
