@@ -21,7 +21,7 @@ export default class DenoCache {
 
     this.setSchema(typeDefs, resolvers);
     this.router = new Router();
-    this.route = '/denocacheql';
+    this.route = '/graphql';
   }
 
   setSchema(typeDefs, resolvers): any {

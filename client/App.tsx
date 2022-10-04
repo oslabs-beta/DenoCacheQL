@@ -14,17 +14,23 @@ const App = () => {
 
   //component for rendering a line graph to visualize response times
   const RenderGraph = ({ responseTimes }) => {
+    //array to store labels for the query number to display on x-axis
     let graphLabels = [];
     responseTimes.map((el, i) => {
       graphLabels.push(i + 1);
     });
 
+    // check if the DOM element exists
     let chartStatus = Chart.getChart('myChart'); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
     }
+
+    //grabs the DOM element to render the chart
     const ctx = document.getElementById('myChart').getContext('2d');
 
+
+    //creates the chart
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
