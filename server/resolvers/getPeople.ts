@@ -23,6 +23,7 @@ const PeopleResolver = {
         //then save the query and the response as the key value pair in redis
         await redis.set(redisKey, JSON.stringify(character.rows));
         // //return the responsect
+
         // console.timeEnd();
         arg.response.headers.set('Source', 'database');
         return character.rows;
@@ -33,6 +34,7 @@ const PeopleResolver = {
       const formatThis = await redis.get(redisKey);
       // console.timeEnd();
       console.log('format....getting from redis', formatThis);
+
       arg.response.headers.set('Source', 'cache');
 
       if (typeof formatThis !== 'string') {

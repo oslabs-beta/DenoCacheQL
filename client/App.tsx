@@ -1,27 +1,65 @@
-//import react
-import React from 'https://esm.sh/react@18.2.0';
-// import {
-//   chart,
-//   getRelativePosition,
-// } from 'https://www.jsdelivr.com/package/npm/chart.js?path=dist';
-// import { Line } from 'https://github.com/reactchartjs/react-chartjs-2';
-//main app container
-import { Chart as ChartJS } from 'https://cdn.skypack.dev/chart.js';
-//import chartJsImage from 'https://cdn.skypack.dev/chart.js-image';
+import { React, ReactDOM } from '../deps.ts';
 
-// import Line from 'https://cdn.skypack.dev/chart.js';
+import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+// import RenderGraph from './components/RenderGraph.tsx';
+
 const App = () => {
-  // const [responseTime, setResponseTime] = React.useState('');
+  let displayResponse;
+
+  //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
+  const [chartData, setChartData] = React.useState({
+    dataSets: [],
+  });
+
+  //array of times, which is passed to the RenderGraph component to chart the response times
+  const [responseTimes, setResponseTimes] = React.useState([]);
+
+  //component for rendering a line graph to visualize response times
+  const RenderGraph = ({ responseTimes }) => {
+    //array to store labels for the query number to display on x-axis
+    let graphLabels = [];
+    responseTimes.map((el, i) => {
+      graphLabels.push(i + 1);
+    });
+
+    // check if the DOM element exists
+    let chartStatus = Chart.getChart('myChart'); // <canvas> id
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+    }
+
+    //grabs the DOM element to render the chart
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+
+    //creates the chart
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: graphLabels,
+        datasets: [
+          {
+            label: 'Response Times',
+            data: responseTimes,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+            yAxisID: 'Queries',
+          },
+        ],
+      },
+    });
+  };
 
   //--------------------------------------
-  const handleSubmitQuery = async (e) => {
+  const handleSubmitQuery = async (e: Event) => {
     e.preventDefault();
 
     const queryTextBox: string | undefined = e.target[0].value;
+    let queryResponse: object = { response: null, source: null, time: null };
 
-    let queryResponse: string;
-    // const query: string = `query getPeople($queryNumber: Int){getPeople()}`;
+    //submit request, sending user's query in the request body
     try {
       const response = await fetch('/graphql', {
         method: 'POST',
@@ -31,25 +69,22 @@ const App = () => {
         },
         body: JSON.stringify({
           query: queryTextBox,
-          //       query: `{
-          //   getPeople (characterNumber: ${queryTextBox}){
-          //     name
-          //   }
-          // }`,
         }),
       });
       //backend checks redis, then db, then returns response
-      //set
-      //take the response and push an object to queryHistory. the object will contain queryqueryTextBox, queryresponse, responseTime
-      console.log(response);
+      //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
-      console.log('json---->', jsonResponse);
-      console.log('headers ----', response.headers);
-      console.log('getPeople---->', jsonResponse.data.getPeople[0]);
-      queryResponse = JSON.stringify(jsonResponse.data.getPeople[0]);
+      displayResponse = jsonResponse.data.getPeople[0];
+      console.log(displayResponse);
+      queryResponse.response = jsonResponse.data.getPeople[0];
+      queryResponse.source = response.headers.get('source');
+      queryResponse.time = response.headers.get('x-response-time');
+
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
-      console.log('queryHistory', queryHistory);
+      let tempResponseTimes = [...responseTimes, queryResponse.time];
+      setResponseTimes(tempResponseTimes);
+      console.log('responsetimes-----', responseTimes);
     } catch (error) {
       console.log('error--->', error);
     }
@@ -57,33 +92,87 @@ const App = () => {
 
   return (
     <>
-      <div className="app">
-        <h1>rendering app.tsx</h1>
-        <div className="topContainer">
-          <div className="requestForm">
+      <React.StrictMode>
+        {/* main app container */}
+        {/* do we want a navbar? maybe that links to a spashpage with docs??? */}
+        <nav>
+          <h1>DenoCacheQL</h1>
+        </nav>
+        {/* page is divided into the topContainer and bottomContainer. The top container holds the query input textarea and the server response. 
+        The bottom container holds the query response history, and graph.  */}
+
+        <div className="container-fluid" id="topContainer">
+          <div id="requestForm">
             <form
               onSubmit={(e) => {
                 handleSubmitQuery(e);
               }}
             >
-              <textarea id="query_text_box" />
-              <button type="submit">Click Me</button>
+              <textarea
+                className="form-control"
+                id="query_text_box"
+                placeholder="Query { }"
+              />
+              <button className="btn" type="submit">
+                Submit Query
+              </button>
             </form>
           </div>
+          <div id="results">
+            <div id="queryResponse">
+              <p>Response</p>
+              {JSON.stringify(queryHistory[queryHistory.length - 1])}
+              {/* {
+for (const [key, value] of Object.entries(object1)) {
+  console.log(`${key}: ${value}`);} */}
+            </div>
+          </div>
         </div>
-        <div className="results">
-          <h1>Results container</h1>
-
-          <ul>
-            {queryHistory.map((name: any, i: number) => {
-              return <li>{name}</li>;
-            })}
-          </ul>
+        <div id="bottomContainer">
+          <table className="table table-dark">
+            <thead>
+              <tr>
+                <th>Query #</th>
+                <th>response</th>
+                <th id="sourceHeader">source</th>
+                <th id="timeHeader">response time (ms)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {queryHistory.map((historyItem:any, i)=>{
+              for (const [key, value] of Object.entries(historyItem)){
+                return (<td>`${key}: ${value}`</td>)
+              }
+            })} */}
+              {queryHistory.map((historyItem: any, i: number) => {
+                console.log(Object.entries(historyItem.response));
+                let displayResponse = '';
+                for (const [key, value] of Object.entries(
+                  historyItem.response
+                )) {
+                  displayResponse += `${key}: ${value} \n`;
+                }
+                return (
+                  <tr>
+                    <td id="queryNumber">{i + 1}</td>
+                    <td id="tableResponse">
+                      {/* {JSON.stringify(historyItem.response)} */}
+                      {/* {Object.entries(historyItem.response)} */}
+                      {displayResponse}
+                    </td>
+                    <td id="tableSource">{historyItem.source}</td>
+                    <td id="tableTime">{historyItem.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <canvas id="myChart" height="200"></canvas>
+          <React.Suspense>
+            <RenderGraph responseTimes={responseTimes} />
+          </React.Suspense>
         </div>
-      </div>
-      <div className="bottomContainer">
-        <h1>display response table and vizualizer here</h1>
-      </div>
+      </React.StrictMode>
     </>
   );
 };
