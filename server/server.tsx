@@ -1,53 +1,35 @@
 //using Oak a middleware framework for Deno
-import { Application, Context, Router } from 'https://deno.land/x/oak/mod.ts';
-
+import {
+  Application,
+  Context,
+  Router,
+} from 'https://deno.land/x/oak@v11.1.0/mod.ts';
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
-import { redis } from '../server/redis.ts';
-
-//imports for serving FrontEnd
 import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
-import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
-import App from '../client/App.tsx';
-import { React } from '../deps.ts';
-import init from "./routes/index.ts";
+//import { redis } from '../server/redis.ts';
+import  DenoCache  from './denoCache.ts'
+import resolvers from "./schema.ts"
+import typeDefs from "./schema.ts"
+import schema from "./schema.ts"
 
 const app = new Application();
-
 const router = new Router();
-const PORT = 3000;
 
+const PORT = 8080;
 
-const jsBundle = '/main.js';
-const js = `import React from "https://esm.sh/react@18.2.0";
- import ReactDOM from "https://esm.sh/react-dom@18.2.0";
- const App = ${App};
- ReactDOM.hydrate(React.createElement(App), document.getElementById('app'));`;
-
-const html = `<html>
-    <head>
-      <link rel="stylesheet" type="text/css" href="/static/style.css">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-      </head>
-      <body>
-      <div id="app">${ReactDOMServer.renderToString(<App />)}</div>  
-      <script type="module" src="${jsBundle}"></script>
-      <script type="module" src="${jsBundle}"></script>
-       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    </body>
-  </html>`;
-
-router
-  .get('/', (context: Context) => {
-    context.response.type = 'text/html';
-    context.response.body = html;
-  })
-  .get(jsBundle, (context: Context) => {
-    context.response.type = 'application/javascript';
-    context.response.body = js;
-  });
+const dc = new DenoCache({
+  //route: '/graphql',
+  typeDefs,
+  resolvers, 
+  redisInfo: {
+    hostname: "redis-15210.c91.us-east-1-3.ec2.cloud.redislabs.com",
+    port: 15210,
+    password: "1eyX8AGHDPj961FSiCaaNrcG4a995swi",
+  }
+})
 
 //redis
-console.log(await redis.ping());
+//console.log(await redis.ping());
 
 //database
 const databaseURL =
@@ -55,26 +37,40 @@ const databaseURL =
 const client = new Client(databaseURL);
 await client.connect();
 
-app.use(async (ctx, next) => {
-  const start = Date.now();
-  await next();
-  const ms = Date.now() - start;
+// ---------server demo html page-----------
+const demoHTML = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Welcome to the Demo Page</h1>
+  </body>
+</html>`;
 
-  ctx.response.headers.set("X-Response-Time", `${ms}ms`);
+router.get('/', (context: Context) => {
+  context.response.type = 'text/html';
+  context.response.body = demoHTML;
 });
 
-app.use(staticFiles('/client/'));
 app.use(router.routes());
-app.use(router.allowedMethods());
+//------end serve demo html page ------
+
+app.use(dc.routes());
+app.use(dc.allowedMethods());
+//app.use(dc.staticFiles('/client'))
 
 //checking server connection
-init(app);
-app.addEventListener('listen', ({ secure, hostname, port}) => {
+
+app.addEventListener('listen', ({ secure, hostname, port }) => {
   const protocol = secure ? 'https://' : 'http://';
-  const url = `${protocol}${hostname ?? "localhost"}: ${port}`;
+  const url = `${protocol}${hostname ?? 'localhost'}: ${port}`;
   console.log(`Listening on: ${port}`);
 });
 
-await app.listen( {port: PORT});
+await app.listen({ port: PORT });
 
-export { client }
+export { client };
