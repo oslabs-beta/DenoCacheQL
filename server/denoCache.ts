@@ -6,6 +6,8 @@ import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
+import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+//import { redis } from '../server/redis.ts';
 // import resolvers from "./schema.ts"
 // import typeDefs from "./schema.ts"
 
@@ -15,13 +17,29 @@ export default class DenoCache {
   typeDefs: any;
   resolvers: any;
   schema: any;
+  jsBundle: any;
+  js: any;
+  html: any;
+  redis: any
+  //app.use(staticFiles('/client/'));
 
   constructor(args: any) {
-    const { typeDefs, resolvers } = args;
+   const {
+    typeDefs,
+    resolvers,
+    redisInfo,
+   } =args
 
-    this.setSchema(typeDefs, resolvers);
-    this.router = new Router();
-    this.route = '/graphql';
+   this.setSchema(typeDefs, resolvers);
+   this.router = new Router();
+   this.route = '/graphql';
+   this.redisConnect(redisInfo)
+   this.allowedMethods()
+  }
+
+  async redisConnect(redisInfo): any {
+     this.redis = await connect(redisInfo)
+     console.log(await this.redis.ping())
   }
 
   setSchema(typeDefs, resolvers): any {
@@ -171,17 +189,44 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
-        const results = await graphql({
-          schema: this.schema,
-          source: query,
-          variableValues: variables,
-          contextValue: { response, request },
-        });
-        response.status = results.errors ? 500 : 200;
-        response.body = results;
-        const end = Date.now() - start;
-        response.headers.set('X-Response-Time', end);
-        return;
+        const redisKey = JSON.stringify(query);
+        const data = await this.redis.exists(redisKey)
+        if (data) {
+          const formatThis = await this.redis.get(redisKey);
+          response.headers.set('Source', 'cache');
+          if (typeof formatThis !== 'string') {
+            let format = JSON.stringify(formatThis);
+            let formattedResponse = JSON.parse(format)
+            response.status = 200;
+            response.body = formattedResponse;
+            const end = Date.now() - start;
+            response.headers.set("X-Response-Time", `${end}ms`)
+            return;
+          } else {
+            let formattedResponse = JSON.parse(formatThis)
+            response.status = 200;
+            response.body = formattedResponse;
+            const end = Date.now() - start;
+            response.headers.set("X-Response-Time", end)
+            return;
+          }
+        } else {
+          const results= await graphql({
+            schema: this.schema,
+            source: query,
+            variableValues: variables,
+            contextValue: {response, request}
+          });
+          await this.redis.set(redisKey, JSON.stringify(results))
+          response.status = results.errors ? 500 : 200;
+          response.body = results;
+          const end = Date.now() - start;
+          response.headers.set("Source", "database")
+          response.headers.set("X-Response-Time", end)
+          return;
+        }
+        
+
       } catch (err) {
         console.error(`${err}`);
         throw err;
