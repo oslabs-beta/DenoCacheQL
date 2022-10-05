@@ -30,7 +30,6 @@ export default class DenoCache {
    this.route = '/graphql';
    this.redisConnect(redisInfo)
    this.allowedMethods()
-   this.cache();
   }
 
   async redisConnect(redisInfo): any {
@@ -44,6 +43,43 @@ export default class DenoCache {
       resolvers: resolvers.resolvers || {},
     });
   }
+
+  async cache({arg, info, context}: any, callback: Function) { 
+    //get redisKey
+    // console.log('arg', arg)
+    // console.log('resolver name', info.fieldName)
+    const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
+    console.log(redisKey)
+    //check redis for cached value
+    const data = await this.redis.exists(redisKey)
+    if (data) {
+      const result = await this.redis.get(redisKey);
+      console.log('data in redis', result)
+      context.response.headers.set('Source', 'cache');
+      console.log ('type', typeof result)
+      if (typeof result !== 'string') {
+        let format = JSON.stringify(result);
+        let formattedResponse = JSON.parse(format)
+        console.log('formatted1', formattedResponse)
+        return formattedResponse;
+      } else {
+        let formattedResponse = JSON.parse(result)
+  
+        console.log('formatted2', formattedResponse)
+        return formattedResponse;
+      }
+    }
+     else {
+    // { characterNumber: 61 }
+      const res = await callback();
+      console.log('response from cb', res)
+      await this.redis.set(redisKey, JSON.stringify(res))
+      context.response.headers.set('Source', 'database');
+      // console.log('res', res);
+      return res;
+     }
+  }
+
 
   routes(): any {
     //serving our graphql IDE
@@ -183,45 +219,20 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
-        const redisKey = JSON.stringify(query);
-        const data = await this.redis.exists(redisKey)
-        if (data) {
-          const formatThis = await this.redis.get(redisKey);
-          response.headers.set('Source', 'cache');
-          if (typeof formatThis !== 'string') {
-            let format = JSON.stringify(formatThis);
-            let formattedResponse = JSON.parse(format)
-            response.status = 200;
-            response.body = formattedResponse;
-            const end = Date.now() - start;
-            response.headers.set("X-Response-Time", end)
-            return;
-          } else {
-            let formattedResponse = JSON.parse(formatThis)
-            response.status = 200;
-            response.body = formattedResponse;
-            const end = Date.now() - start;
-            response.headers.set("X-Response-Time", end)
-            return;
-          }
-        } else {
           const results= await graphql({
             schema: this.schema,
             source: query,
             variableValues: variables,
             contextValue: {response, request, dc:this},
           });
-          await this.redis.set(redisKey, JSON.stringify(results))
+          // await this.redis.set(redisKey, JSON.stringify(results))
           response.status = results.errors ? 500 : 200;
           response.body = results;
           const end = Date.now() - start;
-          response.headers.set("Source", "database")
-          response.headers.set("X-Response-Time", end)
+          // response.headers.set("Source", "database")
+          response.headers.set("X-Response-Time", end.toString())
           return;
-        }
-        
-
-      } catch (err) {
+        } catch (err) {
         console.error(`${err}`);
         throw err;
       }
@@ -233,19 +244,6 @@ export default class DenoCache {
     return this.router.allowedMethods();
   }
 
-  async cache(args: any, callback: Function) { 
-    //check redis for cached value
-    console.log('arg', args)
-    console.log('callback', callback)
-    //console.log('info', info.fieldName)
-    // const redisKey = 
-    // { characterNumber: 61 }
-    // const res = await callback();
-    const res = 'test'
-    // console.log('res', res);
-    return res;
-
-  }
-
+ 
 
 }

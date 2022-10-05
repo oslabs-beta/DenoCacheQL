@@ -28,16 +28,14 @@ import { decodeComponent } from 'https://deno.land/x/oak@v11.1.0/util.ts';
    const resolvers = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
-      console.log("context", context)
-      console.log('arg:', arg)
-    return await context.dc.cache({arg,info}, async() => {       
+      // console.log("context", context)
+      // console.log('arg in getPeople', arg)
+    return await context.dc.cache({arg,info,context}, async() => {       
         const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height FROM people WHERE _id=${arg.characterNumber}`;
         //console.log('in the query')
         const character = await client.queryObject<string>(redisKey);
         //console.log('Character.rows', character.rows);
-        context.response.headers.set('Source', 'database')
-        //then save the query and the response as the key value pair in redis
-        
+
         // //return the responsect
         return character.rows
       }) 
