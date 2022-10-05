@@ -15,10 +15,9 @@ import schema from "./schema.ts"
 const app = new Application();
 const router = new Router();
 
-const PORT = 8080;
+const PORT = 3000;
 
 const dc = new DenoCache({
-  //route: '/graphql',
   typeDefs,
   resolvers, 
   redisInfo: {
@@ -73,4 +72,4 @@ app.addEventListener('listen', ({ secure, hostname, port }) => {
 
 await app.listen({ port: PORT });
 
-export { client };
+export { client, dc };
