@@ -49,6 +49,9 @@ const App = () => {
           },
         ],
       },
+      options: {
+        responsive: true
+      }
     });
   };
 
@@ -100,7 +103,6 @@ const App = () => {
         </nav>
         {/* page is divided into the topContainer and bottomContainer. The top container holds the query input textarea and the server response. 
         The bottom container holds the query response history, and graph.  */}
-
         <div className="container-fluid" id="topContainer">
           <div id="requestForm">
             <form
@@ -169,11 +171,15 @@ for (const [key, value] of Object.entries(object1)) {
               </tbody>
             </table>
           </div>
-          <canvas id="myChart" height="200"></canvas>
+          <div className="chart-container">
+            <canvas id="myChart"></canvas>
+          </div>
           <React.Suspense>
             <RenderGraph responseTimes={responseTimes} />
           </React.Suspense>
         </div>
+        class="chart-container" style="position: relative; height:40vh;
+        width:80vw"
       </React.StrictMode>
     </>
   );

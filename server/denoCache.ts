@@ -193,10 +193,16 @@ export default class DenoCache {
    .table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #2b4a92;
     }
-    canvas {
-    max-width: 50%;
+
+    .chart-container {
+      position: relative; 
+      height:40vh; 
+      width: 40vw;
+    }
+    
+    #myChart{
     display: block;
-    margin: 0 auto;
+    margin: 0;
     background-color: #ffffff;
     }
     </style>
