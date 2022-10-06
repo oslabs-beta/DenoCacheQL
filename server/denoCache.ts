@@ -175,7 +175,10 @@ export default class DenoCache {
     #bottomContainer {
     border: 1px solid rgba(55, 0, 255, 0.23);
     }
-
+    #tableContainer {
+      height: 40vh;
+      background-color: #212529;
+    }
     #tableResponse {
     overflow-wrap: break-word;
     width: 70%;
@@ -190,10 +193,16 @@ export default class DenoCache {
    .table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #2b4a92;
     }
-    canvas {
-    max-width: 50%;
+
+    .chart-container {
+      position: relative; 
+      height:40vh; 
+      width: 40vw;
+    }
+    
+    #myChart{
     display: block;
-    margin: 0 auto;
+    margin: 0;
     background-color: #ffffff;
     }
     </style>
