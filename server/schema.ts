@@ -23,7 +23,11 @@ import { decodeComponent } from 'https://deno.land/x/oak@v11.1.0/util.ts';
   }
   type Query {
     getPeople(characterNumber: Int): [People]
-    }`
+    }
+  type Mutation{
+    setPeople(characterNumber: Int, name: String, mass: String): String
+  }  
+    `
 
    const resolvers = {
   Query: {
@@ -41,6 +45,16 @@ import { decodeComponent } from 'https://deno.land/x/oak@v11.1.0/util.ts';
       }) 
 
     },
+  },
+  Mutation: {
+    setPeople: async (parent: any, arg:any, context: any, info: any) => {
+      console.log('arg:', arg)
+      console.log("in setPeople")
+      const modify = `UPDATE people SET name = ${arg.name}, mass = ${arg.mass} WHERE _id = ${arg.characterNumber};`
+      const result = await client.queryObject<string>(modify);
+      console.log('result:',result)
+      return result
+    }
   }
    }
 
