@@ -129,44 +129,46 @@ for (const [key, value] of Object.entries(object1)) {
           </div>
         </div>
         <div id="bottomContainer">
-          <table className="table table-dark">
-            <thead>
-              <tr>
-                <th>Query #</th>
-                <th>response</th>
-                <th id="sourceHeader">source</th>
-                <th id="timeHeader">response time (ms)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {queryHistory.map((historyItem:any, i)=>{
+          <div className="overflow-auto" id="tableContainer">
+            <table className="table table-dark">
+              <thead>
+                <tr>
+                  <th>Query #</th>
+                  <th>response</th>
+                  <th id="sourceHeader">source</th>
+                  <th id="timeHeader">response time (ms)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* {queryHistory.map((historyItem:any, i)=>{
               for (const [key, value] of Object.entries(historyItem)){
                 return (<td>`${key}: ${value}`</td>)
               }
             })} */}
-              {queryHistory.map((historyItem: any, i: number) => {
-                console.log(Object.entries(historyItem.response));
-                let displayResponse = '';
-                for (const [key, value] of Object.entries(
-                  historyItem.response
-                )) {
-                  displayResponse += `${key}: ${value} \n`;
-                }
-                return (
-                  <tr>
-                    <td id="queryNumber">{i + 1}</td>
-                    <td id="tableResponse">
-                      {/* {JSON.stringify(historyItem.response)} */}
-                      {/* {Object.entries(historyItem.response)} */}
-                      {displayResponse}
-                    </td>
-                    <td id="tableSource">{historyItem.source}</td>
-                    <td id="tableTime">{historyItem.time}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                {queryHistory.map((historyItem: any, i: number) => {
+                  console.log(Object.entries(historyItem.response));
+                  let displayResponse = '';
+                  for (const [key, value] of Object.entries(
+                    historyItem.response
+                  )) {
+                    displayResponse += `${key}: ${value} \n`;
+                  }
+                  return (
+                    <tr>
+                      <td id="queryNumber">{i + 1}</td>
+                      <td id="tableResponse">
+                        {/* {JSON.stringify(historyItem.response)} */}
+                        {/* {Object.entries(historyItem.response)} */}
+                        {displayResponse}
+                      </td>
+                      <td id="tableSource">{historyItem.source}</td>
+                      <td id="tableTime">{historyItem.time}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
           <canvas id="myChart" height="200"></canvas>
           <React.Suspense>
             <RenderGraph responseTimes={responseTimes} />

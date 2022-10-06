@@ -175,7 +175,10 @@ export default class DenoCache {
     #bottomContainer {
     border: 1px solid rgba(55, 0, 255, 0.23);
     }
-
+    #tableContainer {
+      height: 40vh;
+      background-color: #212529;
+    }
     #tableResponse {
     overflow-wrap: break-word;
     width: 70%;
