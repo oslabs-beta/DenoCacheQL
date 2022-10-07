@@ -228,6 +228,7 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
+        console.log('query:' , query )
           const results= await graphql({
             schema: this.schema,
             source: query,
