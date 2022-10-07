@@ -102,35 +102,18 @@ export default class DenoCache {
       </head>
       <body>
       <style>
+
+      body {
+        background-color: #20366b;
+      }
       h1 {
       color: #f27370;
       }
       h2 {
       font-size: 26px;
       }
-
       #app {
-
-      display: flex;
-      flex-direction: column;
-      margin: 0 auto;
-      padding: 30px;
-      min-width: fit-content;
-      background-color: #20366b;
-      height: 100%;
-      }
-
-      #topContainer,
-      #bottomContainer {
-      margin: 10px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      width: 100%;
-      height: fit-contents;
-      gap: 5px;
-      padding: 0;
-      padding-right: 10px;
+        padding: 30px;
       }
 
       #topContainer textarea {
@@ -145,12 +128,13 @@ export default class DenoCache {
       rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
       padding: 30px;
       }
+     
       #requestForm,
       #results {
        border: 1px solid rgba(55, 0, 255, 0.23);
        border-radius: 4px;
       padding: 18px;
-     width: 50%;
+
       height: fit-contents;
       background-color: #eae3e3;
     }
@@ -174,9 +158,10 @@ export default class DenoCache {
     }
     #bottomContainer {
     border: 1px solid rgba(55, 0, 255, 0.23);
+    padding: 0;
+  
     }
     #tableContainer {
-      height: 40vh;
       background-color: #212529;
     }
     #tableResponse {
@@ -186,23 +171,11 @@ export default class DenoCache {
     table {
     text-align: center;
     overflow: auto;
-    height: 200px;
     }
-
-   .table-striped > tbody > tr:nth-child(odd) > td,
-   .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #2b4a92;
+    #chart-container{
+      padding:0;
     }
-
-    .chart-container {
-      position: relative; 
-      height:40vh; 
-      width: 40vw;
-    }
-    
     #myChart{
-    display: block;
-    margin: 0;
     background-color: #ffffff;
     }
     </style>
