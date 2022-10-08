@@ -1,16 +1,13 @@
-import { React, ReactDOM } from '../deps.ts';
+import { React } from '../deps.ts';
 
 import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
 // import RenderGraph from './components/RenderGraph.tsx';
 
 const App = () => {
-  let displayResponse;
+
 
   //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
-  const [chartData, setChartData] = React.useState({
-    dataSets: [],
-  });
   const [responseData, setResponseData] = React.useState({})
 
   //array of times, which is passed to the RenderGraph component to chart the response times
@@ -78,12 +75,12 @@ const App = () => {
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
-      displayResponse = jsonResponse.data.getPeople[0];
-      console.log(displayResponse);
+      
+      
       const resolver: string = Object.keys(jsonResponse.data)[0];
-      console.log('resolver variable ---->', resolver);
-      displayResponse = jsonResponse.data[resolver][0];
-      queryResponse.response = jsonResponse.data.getPeople[0];
+      
+    
+      queryResponse.response = jsonResponse.data[resolver][0];
       queryResponse.source = response.headers.get('source');
       queryResponse.time = response.headers.get('x-response-time');
 
@@ -91,9 +88,9 @@ const App = () => {
       setQueryHistory(tempArray);
       let tempResponseTimes = [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
-      console.log('responsetimes-----', responseTimes);
-      setResponseData(jsonResponse.data.getPeople[0])
-      console.log(jsonResponse.data.getPeople[0])
+    
+      setResponseData(jsonResponse.data[resolver][0])
+      
     } catch (error) {
       console.log('error--->', error);
     }
