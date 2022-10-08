@@ -44,6 +44,12 @@ export default class DenoCache {
     });
   }
 
+  async flush(callback: Function){
+    await this.redis.flushall() 
+    const res = await callback()
+    return res;
+  }
+
   async cache({arg, info, context}: any, callback: Function) { 
     //get redisKey
     // console.log('arg', arg)
@@ -64,18 +70,15 @@ export default class DenoCache {
         return formattedResponse;
       } else {
         let formattedResponse = JSON.parse(result)
-  
         console.log('formatted2', formattedResponse)
         return formattedResponse;
       }
     }
      else {
-    // { characterNumber: 61 }
       const res = await callback();
       console.log('response from cb', res)
       await this.redis.set(redisKey, JSON.stringify(res))
       context.response.headers.set('Source', 'database');
-      // console.log('res', res);
       return res;
      }
   }
@@ -201,6 +204,7 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
+        console.log('query:' , query )
           const results= await graphql({
             schema: this.schema,
             source: query,
