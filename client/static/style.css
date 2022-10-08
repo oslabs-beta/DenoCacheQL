@@ -1,14 +1,151 @@
-/* body {
-  border: 1px solid red;
-  } */
-
-.app {
-  border: 1px solid blue;
-  display: block;
-  margin: 0 auto;
-  max-width: 70%;
+.first-color {
+  background: #2d095c;
 }
 
-.test {
-  border: 1px solid red;
+.second-color {
+  background: #20366b;
 }
+
+.third-color {
+  background: #dd7777;
+}
+
+.fourth-color {
+  background: #eae3e3;
+}
+/* --------------------------------- */
+.first-color {
+  background: #22559c;
+}
+
+.second-color {
+  background: #f27370;
+}
+
+.third-color {
+  background: #fa9856;
+}
+
+.fourth-color {
+  background: #ede862;
+}
+/* --------------------------------- */
+.first-color {
+  background: #2e94b9;
+}
+
+.second-color {
+  background: #475053;
+}
+
+.third-color {
+  background: #acdcee;
+}
+
+.fourth-color {
+  background: #f0fbff;
+}
+
+      h1 {
+      color: #f27370;
+      }
+      h2 {
+      font-size: 26px;
+      }
+
+      #app {
+
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      padding: 30px;
+      min-width: fit-content;
+      background-color: #20366b;
+      height: 100%;
+      }
+
+      #topContainer,
+      #bottomContainer {
+      margin: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+      height: fit-contents;
+      gap: 5px;
+      padding: 0;
+      padding-right: 10px;
+      }
+
+      #topContainer textarea {
+      height: 250px;
+      width: 98%;
+      border: 1px solid rgb(158, 185, 195);
+      border-radius: 4px;
+      outline: none;
+      overflow: auto;
+      overflow-wrap: break-word;
+      box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+      rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+      padding: 30px;
+      }
+      #requestForm,
+      #results {
+       border: 1px solid rgba(55, 0, 255, 0.23);
+       border-radius: 4px;
+      padding: 18px;
+     width: 50%;
+      height: fit-contents;
+      background-color: #eae3e3;
+    }
+
+    #requestForm button {
+     float: right;
+      margin-top: 7px;
+     background-color: #48395c;
+     border-radius: 9px;
+      color: white;
+    }
+
+    #queryResponse {
+     border: 1px solid rgba(55, 0, 255, 0.23);
+     padding: 30px;
+     border-radius: 4px;
+      height: 250px;
+      overflow-wrap: break-word;
+      box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+    }
+    #bottomContainer {
+    border: 1px solid rgba(55, 0, 255, 0.23);
+    }
+    #tableContainer {
+      height: 40vh;
+      background-color: #212529;
+    }
+    #tableResponse {
+    overflow-wrap: break-word;
+    width: 70%;
+    }
+    table {
+    text-align: center;
+    overflow: auto;
+    height: 200px;
+    }
+
+   .table-striped > tbody > tr:nth-child(odd) > td,
+   .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #2b4a92;
+    }
+
+    .chart-container {
+      position: relative; 
+      height:40vh; 
+      width: 40vw;
+    }
+    
+    #myChart{
+    display: block;
+    margin: 0;
+    background-color: #ffffff;
+    }
