@@ -11,6 +11,7 @@ const App = () => {
   const [chartData, setChartData] = React.useState({
     dataSets: [],
   });
+  const [charData, setCharData] = React.useState({})
 
   //array of times, which is passed to the RenderGraph component to chart the response times
   const [responseTimes, setResponseTimes] = React.useState([]);
@@ -79,6 +80,9 @@ const App = () => {
       const jsonResponse = await response.json();
       displayResponse = jsonResponse.data.getPeople[0];
       console.log(displayResponse);
+      const resolver: string = Object.keys(jsonResponse.data)[0];
+      console.log('resolver variable ---->', resolver);
+      displayResponse = jsonResponse.data[resolver][0];
       queryResponse.response = jsonResponse.data.getPeople[0];
       queryResponse.source = response.headers.get('source');
       queryResponse.time = response.headers.get('x-response-time');
@@ -88,6 +92,8 @@ const App = () => {
       let tempResponseTimes = [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
       console.log('responsetimes-----', responseTimes);
+      setCharData(jsonResponse.data.getPeople[0])
+      console.log(jsonResponse.data.getPeople[0])
     } catch (error) {
       console.log('error--->', error);
     }
@@ -124,7 +130,7 @@ const App = () => {
             <div className="col-sm-6" id="results">
               <div id="queryResponse">
                 <p>Response</p>
-                {JSON.stringify(queryHistory[queryHistory.length - 1])}
+                <pre>{JSON.stringify(charData, null, 2) }</pre>
                 {/* {
 for (const [key, value] of Object.entries(object1)) {
   console.log(`${key}: ${value}`);} */}
