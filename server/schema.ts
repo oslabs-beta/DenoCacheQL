@@ -1,9 +1,6 @@
 import { __Directive } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import { client } from './server.tsx';
 
-
-
-
   const typeDefs = 
   `type People {
     _id: Int
@@ -27,6 +24,7 @@ import { client } from './server.tsx';
 
   type Query {
     getPeople(characterNumber: Int): [People]
+    species: [Species] 
   }
   type Mutation{
     setPeople(characterNumber: Int, name: String, mass: String): Int
@@ -36,7 +34,8 @@ import { client } from './server.tsx';
    const resolvers = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
-      //console.log('info', info)
+      console.log('info', info)
+      console.log('arg', arg)
     return await context.dc.cache({arg,info,context}, async() => {       
         const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height, species_id FROM people WHERE _id=${arg.characterNumber}`;
         const character = await client.queryObject<string>(redisKey);
@@ -46,23 +45,21 @@ import { client } from './server.tsx';
     }
   },
   People: {
-    species(parent){
-      console.log('parent:', parent)
-      async () => {
-            console.log('in species resolver')
-            console.log("parent", parent)       
+    species: async (parent: any, arg: any, info: any) => {
+              console.log('parent', parent)
               const redisKey = `SELECT name, classification FROM species WHERE _id=${parent.species_id}`;
               const character = await client.queryObject<string>(redisKey);
               return character.rows
-    }
   }
 },
-  Species:{
-    _id(parent){
-      console.log(parent)
-      return parent._id
-    }
-  },
+
+  // Species:{
+  //   _id(parent){
+  //     console.log('this is the parent resolver', parent)
+  //     console.log('id:', parent.species_id)
+  //     return {name: 'test'}
+  //   }
+  // },
   // Species:{
   //     _id{
   //       console.log(resolve)
