@@ -48,8 +48,9 @@ const App = () => {
         ],
       },
       options: {
-        responsive: true
-      }
+        maintainAspectRatio: false,
+        responsive: true,
+      },
     });
   };
 
