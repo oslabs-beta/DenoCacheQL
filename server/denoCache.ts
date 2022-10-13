@@ -55,28 +55,28 @@ export default class DenoCache {
     // console.log('arg', arg)
     // console.log('resolver name', info.fieldName)
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
-    console.log(redisKey)
+    //console.log('redisKey:', redisKey)
     //check redis for cached value
     const data = await this.redis.exists(redisKey)
     if (data) {
       const result = await this.redis.get(redisKey);
-      console.log('data in redis', result)
+      // console.log('data in redis', result)
       context.response.headers.set('Source', 'cache');
-      console.log ('type', typeof result)
+      //console.log ('type', typeof result)
       if (typeof result !== 'string') {
         let format = JSON.stringify(result);
         let formattedResponse = JSON.parse(format)
-        console.log('formatted1', formattedResponse)
+        //console.log('formatted1', formattedResponse)
         return formattedResponse;
       } else {
         let formattedResponse = JSON.parse(result)
-        console.log('formatted2', formattedResponse)
+        //console.log('formatted2', formattedResponse)
         return formattedResponse;
       }
     }
      else {
       const res = await callback();
-      console.log('response from cb', res)
+      //console.log('response from cb', res)
       await this.redis.set(redisKey, JSON.stringify(res))
       context.response.headers.set('Source', 'database');
       return res;
@@ -206,7 +206,7 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
-        console.log('query:' , query )
+        //console.log('query:' , query )
           const results= await graphql({
             schema: this.schema,
             source: query,
