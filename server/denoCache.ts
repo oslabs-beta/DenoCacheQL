@@ -111,10 +111,7 @@ export default class DenoCache {
       #app {
         padding: 30px;
       }
-      # topContainer {
-        border: 1px solid rgba(55, 0, 255, 0.23);
-        border-radius: 4px;
-      }
+   
       #topContainer textarea {
       height: 250px;
       width: 98%;
@@ -153,8 +150,10 @@ export default class DenoCache {
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
       rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
     }
-    #bottomContainer {
+    #topContainer, #bottomContainer {
       border: 1px solid rgba(55, 0, 255, 0.23);
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      border-radius: 8px;
       padding: 0;
   
     }
