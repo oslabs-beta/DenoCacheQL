@@ -167,7 +167,8 @@ for (const [key, value] of Object.entries(object1)) {
                         <td id="tableResponse">
                           {/* {JSON.stringify(historyItem.response)} */}
                           {/* {Object.entries(historyItem.response)} */}
-                          {displayResponse}
+                          {/* {displayResponse} */}
+                          <pre>{JSON.stringify(historyItem.response, null, 2)}</pre>
                         </td>
                         <td id="tableSource">{historyItem.source}</td>
                         <td id="tableTime">{historyItem.time}</td>
