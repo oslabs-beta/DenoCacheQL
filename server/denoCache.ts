@@ -111,7 +111,10 @@ export default class DenoCache {
       #app {
         padding: 30px;
       }
-
+      # topContainer {
+        border: 1px solid rgba(55, 0, 255, 0.23);
+        border-radius: 4px;
+      }
       #topContainer textarea {
       height: 250px;
       width: 98%;
@@ -127,35 +130,32 @@ export default class DenoCache {
      
       #requestForm,
       #results {
-       border: 1px solid rgba(55, 0, 255, 0.23);
-       border-radius: 4px;
       padding: 18px;
-
       height: fit-contents;
       background-color: #eae3e3;
     }
 
     #requestForm button {
-     float: right;
+      float: right;
       margin-top: 7px;
-     background-color: #48395c;
-     border-radius: 9px;
+      background-color: #48395c;
+      border-radius: 9px;
       color: white;
     }
 
     #queryResponse {
-     border: 1px solid rgba(55, 0, 255, 0.23);
-     padding: 30px;
-     border-radius: 4px;
+      border: 1px solid rgba(55, 0, 255, 0.23);
+      padding: 30px;
+      border-radius: 4px;
       height: 250px;
       overflow: auto;
       overflow-wrap: break-word;
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
-    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+      rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
     }
     #bottomContainer {
-    border: 1px solid rgba(55, 0, 255, 0.23);
-    padding: 0;
+      border: 1px solid rgba(55, 0, 255, 0.23);
+      padding: 0;
   
     }
     #tableContainer {
@@ -163,20 +163,20 @@ export default class DenoCache {
       height: 300px;
     }
     #tableResponse {
-    overflow-wrap: break-word;
-    width: 70%;
-    text-align: left;
+      overflow-wrap: break-word;
+      width: 70%;
+      text-align: left;
     }
     table {
-    text-align: center;
-    overflow: auto;
+      text-align: center;
+      overflow: auto;
     }
     #chart-container{
       padding:0;
       height: 300px;
     }
     #myChart{
-    background-color: #ffffff;
+      background-color: #ffffff;
     }
     </style>
       <div id="app">${appHtml}</div>
