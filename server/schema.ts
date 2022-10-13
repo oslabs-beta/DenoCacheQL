@@ -37,8 +37,8 @@ import { client } from './server.tsx';
       console.log('info', info)
       console.log('arg', arg)
     return await context.dc.cache({arg,info,context}, async() => {       
-        const redisKey = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height, species_id FROM people WHERE _id=${arg.characterNumber}`;
-        const character = await client.queryObject<string>(redisKey);
+        const sqlQuery = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height, species_id FROM people WHERE _id=${arg.characterNumber}`;
+        const character = await client.queryObject<string>(sqlQuery);
         character.rows[0].species_id = Number(character.rows[0].species_id)
         return character.rows
       }) 
