@@ -164,7 +164,6 @@ export default class DenoCache {
     #tableResponse {
       overflow-wrap: break-word;
       width: 70%;
-      text-align: left;
     }
     table {
       text-align: center;
