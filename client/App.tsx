@@ -75,11 +75,13 @@ const App = () => {
       const jsonResponse = await response.json();
       console.log('jsonResponse ----', jsonResponse);
       const resolver: string = Object.keys(jsonResponse.data)[0];
-
+      
+      //if the response headers includes a source, it is returning from either the database or the cache (hardcoded on the backend). If the headers includes 'source', it is a query. If the headers does not include 'source', it is not a query, so store the response object.
       if (!response.headers.get('source')) {
         queryResponse.response = jsonResponse.data;
         queryResponse.source = '--';
       } else {
+        //if the headers includes 'source' sent from the backend, it is a query, so store the response, accessing the resolver and the response data (returned as an array) stored at index 0.
         queryResponse.response = jsonResponse.data[resolver][0];
         queryResponse.source = response.headers.get('source');
       }
@@ -90,6 +92,8 @@ const App = () => {
       setQueryHistory(tempArray);
       let tempResponseTimes = [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
+
+     //update the responseData variable to display in the response area according to whether or not it is a result of a query. If the response is sent back with a 'source' (either cache or databse), then it is a query. 
       response.headers.get('source') ? setResponseData(jsonResponse.data[resolver][0])
         : setResponseData(jsonResponse.data);
     } catch (error) {
