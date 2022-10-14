@@ -4,11 +4,9 @@ import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.
 // import RenderGraph from './components/RenderGraph.tsx';
 
 const App = () => {
-
-
   //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
-  const [responseData, setResponseData] = React.useState({})
+  const [responseData, setResponseData] = React.useState({});
 
   //array of times, which is passed to the RenderGraph component to chart the response times
   const [responseTimes, setResponseTimes] = React.useState([]);
@@ -29,7 +27,6 @@ const App = () => {
 
     //grabs the DOM element to render the chart
     const ctx = document.getElementById('myChart').getContext('2d');
-
 
     //creates the chart
     const myChart = new Chart(ctx, {
@@ -76,25 +73,25 @@ const App = () => {
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
-      
-      
+      console.log('jsonResponse ----', jsonResponse);
       const resolver: string = Object.keys(jsonResponse.data)[0];
-      
-    
-      queryResponse.response = jsonResponse.data[resolver][0];
-      if (!response.headers.get('source')) {queryResponse.source = '--'} 
-      else {
-      queryResponse.source = response.headers.get('source');
-      }
-      queryResponse.time = response.headers.get('x-response-time');
 
+      if (!response.headers.get('source')) {
+        queryResponse.response = jsonResponse.data;
+        queryResponse.source = '--';
+      } else {
+        queryResponse.response = jsonResponse.data[resolver][0];
+        queryResponse.source = response.headers.get('source');
+      }
+      
+      queryResponse.time = response.headers.get('x-response-time');
+      console.log('queryResponse ----- ', queryResponse);
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
       let tempResponseTimes = [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
-    
-      setResponseData(jsonResponse.data[resolver][0])
-      
+      response.headers.get('source') ? setResponseData(jsonResponse.data[resolver][0])
+        : setResponseData(jsonResponse.data);
     } catch (error) {
       console.log('error--->', error);
     }
@@ -131,10 +128,7 @@ const App = () => {
             <div className="col-sm-6" id="results">
               <div id="queryResponse">
                 <p>Response</p>
-                <pre>{JSON.stringify(responseData, null, 2) }</pre>
-                {/* {
-for (const [key, value] of Object.entries(object1)) {
-  console.log(`${key}: ${value}`);} */}
+                <pre>{JSON.stringify(responseData, null, 2)}</pre>
               </div>
             </div>
           </div>
@@ -146,12 +140,13 @@ for (const [key, value] of Object.entries(object1)) {
                   <tr>
                     <th>Query #</th>
                     <th>response</th>
-                    <th id="sourceHeader">Source</th>
-                    <th id="timeHeader">Response Time (ms)</th>
+                    <th id="sourceHeader">source</th>
+                    <th id="timeHeader">response time (ms)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {queryHistory.map((historyItem: any, i: number) => {
+                    console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(
                       historyItem.response
