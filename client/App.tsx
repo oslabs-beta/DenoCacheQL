@@ -82,7 +82,10 @@ const App = () => {
       
     
       queryResponse.response = jsonResponse.data[resolver][0];
+      if (!response.headers.get('source')) {queryResponse.source = '--'} 
+      else {
       queryResponse.source = response.headers.get('source');
+      }
       queryResponse.time = response.headers.get('x-response-time');
 
       let tempArray = [...queryHistory, queryResponse];
@@ -143,18 +146,12 @@ for (const [key, value] of Object.entries(object1)) {
                   <tr>
                     <th>Query #</th>
                     <th>response</th>
-                    <th id="sourceHeader">source</th>
-                    <th id="timeHeader">response time (ms)</th>
+                    <th id="sourceHeader">Source</th>
+                    <th id="timeHeader">Response Time (ms)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {queryHistory.map((historyItem:any, i)=>{
-              for (const [key, value] of Object.entries(historyItem)){
-                return (<td>`${key}: ${value}`</td>)
-              }
-            })} */}
                   {queryHistory.map((historyItem: any, i: number) => {
-                    console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(
                       historyItem.response
@@ -165,10 +162,7 @@ for (const [key, value] of Object.entries(object1)) {
                       <tr>
                         <td id="queryNumber">{i + 1}</td>
                         <td id="tableResponse">
-                          {/* {JSON.stringify(historyItem.response)} */}
-                          {/* {Object.entries(historyItem.response)} */}
-                          {/* {displayResponse} */}
-                          <pre>{JSON.stringify(historyItem.response, null, 2)}</pre>
+                          {JSON.stringify(historyItem.response, null, 2)}
                         </td>
                         <td id="tableSource">{historyItem.source}</td>
                         <td id="tableTime">{historyItem.time}</td>

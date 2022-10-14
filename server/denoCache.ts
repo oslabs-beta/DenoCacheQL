@@ -80,7 +80,7 @@ export default class DenoCache {
   routes(): any {
     //serving our graphql IDE
 
-    const jsBundle = '/main.js';
+    const jsBundle = '/denocacheql.js';
     const js = `import React from "https://esm.sh/react@18.2.0";
     import ReactDOM from "https://esm.sh/react-dom@18.2.0";
     const App = ${App};
