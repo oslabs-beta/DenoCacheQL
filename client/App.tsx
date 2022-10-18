@@ -4,11 +4,9 @@ import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.
 // import RenderGraph from './components/RenderGraph.tsx';
 
 const App = () => {
-
-
   //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
-  const [responseData, setResponseData] = React.useState({})
+  const [responseData, setResponseData] = React.useState({});
 
   //array of times, which is passed to the RenderGraph component to chart the response times
   const [responseTimes, setResponseTimes] = React.useState([]);
@@ -29,7 +27,6 @@ const App = () => {
 
     //grabs the DOM element to render the chart
     const ctx = document.getElementById('myChart').getContext('2d');
-
 
     //creates the chart
     const myChart = new Chart(ctx, {
@@ -76,22 +73,29 @@ const App = () => {
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
-      
-      
+      console.log('jsonResponse ----', jsonResponse);
       const resolver: string = Object.keys(jsonResponse.data)[0];
       
-    
-      queryResponse.response = jsonResponse.data[resolver][0];
-      queryResponse.source = response.headers.get('source');
+      //if the response headers includes a source, it is returning from either the database or the cache (hardcoded on the backend). If the headers includes 'source', it is a query. If the headers does not include 'source', it is not a query, so store the response object.
+      if (!response.headers.get('source')) {
+        queryResponse.response = jsonResponse.data;
+        queryResponse.source = '--';
+      } else {
+        //if the headers includes 'source' sent from the backend, it is a query, so store the response, accessing the resolver and the response data (returned as an array) stored at index 0.
+        queryResponse.response = jsonResponse.data[resolver][0];
+        queryResponse.source = response.headers.get('source');
+      }
+      
       queryResponse.time = response.headers.get('x-response-time');
-
+      console.log('queryResponse ----- ', queryResponse);
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
       let tempResponseTimes = [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
-    
-      setResponseData(jsonResponse.data[resolver][0])
-      
+
+     //update the responseData variable to display in the response area according to whether or not it is a result of a query. If the response is sent back with a 'source' (either cache or databse), then it is a query. 
+      response.headers.get('source') ? setResponseData(jsonResponse.data[resolver][0])
+        : setResponseData(jsonResponse.data);
     } catch (error) {
       console.log('error--->', error);
     }
@@ -128,10 +132,7 @@ const App = () => {
             <div className="col-sm-6" id="results">
               <div id="queryResponse">
                 <p>Response</p>
-                <pre>{JSON.stringify(responseData, null, 2) }</pre>
-                {/* {
-for (const [key, value] of Object.entries(object1)) {
-  console.log(`${key}: ${value}`);} */}
+                <pre>{JSON.stringify(responseData, null, 2)}</pre>
               </div>
             </div>
           </div>
@@ -148,11 +149,6 @@ for (const [key, value] of Object.entries(object1)) {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {queryHistory.map((historyItem:any, i)=>{
-              for (const [key, value] of Object.entries(historyItem)){
-                return (<td>`${key}: ${value}`</td>)
-              }
-            })} */}
                   {queryHistory.map((historyItem: any, i: number) => {
                     console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
@@ -165,9 +161,7 @@ for (const [key, value] of Object.entries(object1)) {
                       <tr>
                         <td id="queryNumber">{i + 1}</td>
                         <td id="tableResponse">
-                          {/* {JSON.stringify(historyItem.response)} */}
-                          {/* {Object.entries(historyItem.response)} */}
-                          {displayResponse}
+                          {JSON.stringify(historyItem.response, null, 2)}
                         </td>
                         <td id="tableSource">{historyItem.source}</td>
                         <td id="tableTime">{historyItem.time}</td>
