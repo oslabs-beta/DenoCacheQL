@@ -4,6 +4,7 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 -->
 
 <!-- Import Logo here -->
+![DenoCacheQL cover photo](./logos/DQL%20cover%20photo%20readme(600%20%C3%97%20275%20px)%20for%20readme.png)
 # DenoCacheQL
 <!-- Beta version?  -->
 
