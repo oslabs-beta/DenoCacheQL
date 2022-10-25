@@ -72,7 +72,6 @@ const App = () => {
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
       const jsonResponse = await response.json();
-      console.log('jsonResponse ----', jsonResponse);
       const resolver: string = Object.keys(jsonResponse.data)[0];
       
       //if the response headers includes a source, it is returning from either the database or the cache (hardcoded on the backend). If the headers includes 'source', it is a query. If the headers does not include 'source', it is not a query, so store the response object.
@@ -86,7 +85,6 @@ const App = () => {
       }
       
       queryResponse.time = response.headers.get('x-response-time');
-      console.log('queryResponse ----- ', queryResponse);
       let tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
       let tempResponseTimes = [...responseTimes, queryResponse.time];
