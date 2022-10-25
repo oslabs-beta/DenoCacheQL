@@ -39,38 +39,29 @@ export default class DenoCache {
     });
   }
 
-  async flush(callback: Function) {
+  async flush() {
     await this.redis.flushall();
-    const res = await callback();
-    return res;
+    return
   }
 
   async cache({ arg, info, context }: any, callback: Function) {
     //get redisKey
-    // console.log('arg', arg)
-    // console.log('resolver name', info.fieldName)
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
-    //console.log('redisKey:', redisKey)
     //check redis for cached value
     const data = await this.redis.exists(redisKey);
     if (data) {
       const result = await this.redis.get(redisKey);
-      // console.log('data in redis', result)
       context.response.headers.set('Source', 'cache');
-      //console.log ('type', typeof result)
       if (typeof result !== 'string') {
         let format = JSON.stringify(result);
         let formattedResponse = JSON.parse(format);
-        //console.log('formatted1', formattedResponse)
         return formattedResponse;
       } else {
         let formattedResponse = JSON.parse(result);
-        //console.log('formatted2', formattedResponse)
         return formattedResponse;
       }
     } else {
       const res = await callback();
-      //console.log('response from cb', res)
       await this.redis.set(redisKey, JSON.stringify(res));
       context.response.headers.set('Source', 'database');
       return res;
