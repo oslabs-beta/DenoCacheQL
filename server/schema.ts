@@ -83,6 +83,7 @@ import { client } from './server.tsx';
       return await context.dc.flush(async() =>{
         const modify = `UPDATE people SET name = '${arg.name}', mass = '${arg.mass}' WHERE _id = ${arg.characterNumber};`
         const result = await client.queryObject<string>(modify);
+        console.log(result.query.result_type)
         return result.query.result_type;})
 
     }

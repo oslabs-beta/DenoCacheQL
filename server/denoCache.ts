@@ -166,7 +166,6 @@ export default class DenoCache {
     }
     #tableContainer {
       background-color: #212529;
-      height: 300px;
     }
     #tableResponse {
     overflow-wrap: break-word;
@@ -178,7 +177,6 @@ export default class DenoCache {
     }
     #chart-container{
       padding:0;
-      height: 300px;
     }
     #myChart{
     background-color: #ffffff;
