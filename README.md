@@ -46,7 +46,7 @@ app.use(dc.allowedMethods());
 
 ### How To Implement Caching Functionailty
 
-Once you've imported the module and created your DenoCache instance, you'll be able to access the DenoCache functions from the context.  Because DenoCache implmentation is modular, you can choose the specific resolvers in which you want to use the caching functionality.  One easy way to implement the caching functionality is by wrapping your resolver logic as a callback inside the DenoCache cache function, as demonstrated below.
+Once you've imported the module and created your DenoCache instance, you'll be able to access the DenoCache functions from the context argument.  Because DenoCache implmentation is modular, you can choose the specific resolvers in which you want to use the caching functionality.  One easy way to implement the caching functionality is by wrapping your resolver logic as a callback inside the DenoCache cache function, as demonstrated below.
  
 ```
 const resolvers = {
@@ -67,7 +67,7 @@ const resolvers = {
   Query: {
     myQuery: async (parent, arg, context, info) => {
     const {dc} = context 
-    return await **dc.cache**({parent, arg, context, info}, async() => {
+    return await dc.cache({parent, arg, context, info}, async() => {
        //put your resolver logic here
        ...
       })
@@ -83,7 +83,7 @@ Mutation: {
   myMutation: async (parent, arg, context, info) => {
     //put your mutation logic here
     ...
-     await **context.dc.flush()**
+     await context.dc.flush()
     })
   }
 ```
@@ -92,7 +92,9 @@ Mutation: {
 ### Testing Queries and Making Mutations 
 
 ![Animation of Front-End Query](./assets/readme/DQL%20readme%20demo%20(940%20%C3%97%20760%20px).gif)
-To use the front-end playground use the URL endpoint /graphql.
+
+
+**To use the front-end playground use the URL endpoint /graphql.**
 
 We made the front-end playground as intuitive as possible by allowing developers to input queries and mutations with the same syntax they expect from GraphQl. After submitting a query, the returned response will be displayed to the right of the query. 
 
