@@ -3,33 +3,32 @@ Resource for markdown formatting
 https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 -->
 
-<!-- Import Logo here -->
-
 ![DenoCacheQL cover photo](./assets/readme/DQL%20cover%20photo%20readme(600%20%C3%97%20275%20px)%20for%20readme.png)
 
-# DenoCacheQL
-
-<!-- Beta version?  -->
+# ✨ DenoCacheQL ✨
 
 ## What is DenoCacheQL
 
-<!-- We can pull info from our medium article to use here -->
+With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries on their Redis server for more efficient queries. The DenoCacheQL playground allows a developer to test their GraphQL queries, receiving back the responses from their queries, the response times, and the response source (database or cache).  We've also included a graph of the reposonse time for easy latency visualization.
 
-With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries on their Redis server for more efficient queries. The DenoCacheQL playground allows a developer to test their GraphQL queries, receiving the responses and the response times, in order to see the time saved by using the cache.
+## 📖 Getting Started 📖
 
-## Getting started
+### How to set up the DenoCacheQL 
 
-### How to set up the DenoCacheQL
+To set up your server to use DenoCacheQL: 
+ - Import DenoCacheQL, resolvers, and typeDefs.
+ - Make sure the redis server is up and running.
+ - Create a new instance of DenoCache.
+ - Configure the server to use DenoCache routes.
 
-<!-- backend -->
-
-Import the module and set up a DenoCache instance by passing in typeDefs, resolvers, and redis server info.
+Example set up:
 
 ```
+//import 
 import  DenoCache  from './denoCache.ts' *replace link
-import {resolvers, typeDefs} from "./schema.ts" *
+import {resolvers, typeDefs} from "./schema.ts" 
 
-
+//creating a new instance
 const dc = new DenoCache({
   typeDefs,
   resolvers, 
@@ -40,12 +39,10 @@ const dc = new DenoCache({
   }
 })
 
-
+//using DC routes
 app.use(dc.routes());
 app.use(dc.allowedMethods());
 ```
-
-
 
 ### How To Implement Caching Functionailty
 
@@ -70,7 +67,7 @@ const resolvers = {
   Query: {
     myQuery: async (parent, arg, context, info) => {
     const {dc} = context 
-    return await dc.cache({parent, arg, context, info}, async() => {
+    return await **dc.cache**({parent, arg, context, info}, async() => {
        //put your resolver logic here
        ...
       })
@@ -79,40 +76,38 @@ const resolvers = {
   ```
 ### How to clear the cache
 
-If you want to clear the cache, you can use await redis.flushall(). (Will this work??)
-
-### Mutations
-
-This tool does not currently mutate data stored in the cache. However, if you would like to mutate your data and clear the cache at the same time so that incorrect data doesn't remain in the cache, then simply wrap your mutation logic as a callback inside the DenoCache flush function, as exampled below. 
+If you would like to mutate your data and clear the cache at the same time so that incorrect data doesn't remain in the cache, DenoCache provides a flush function. Call this function whenever you would like to clear the cache, or you may use the redis.flushall() in the redis terminal. 
 
 ```
 Mutation: {
   myMutation: async (parent, arg, context, info) => {
-    return await context.dc.flush(async () => {
     //put your mutation logic here
     ...
+     await **context.dc.flush()**
     })
   }
-}
 ```
 
 ## Using the Front-End Playground
-
-### Testing Queries and Making Mutations
+### Testing Queries and Making Mutations 
 
 ![Animation of Front-End Query](./assets/readme/DQL%20readme%20demo%20(940%20%C3%97%20760%20px).gif)
 To use the front-end playground use the URL endpoint /graphql.
 
-We tried to make the front-end playground as intuitive as possible by allowing developers to input queries and mutations with the same syntax they expect from GraphQl. After submitting a query, the returned response will be displayed to the right of the query. 
+We made the front-end playground as intuitive as possible by allowing developers to input queries and mutations with the same syntax they expect from GraphQl. After submitting a query, the returned response will be displayed to the right of the query. 
 
 We built the bottom half of the playground to visualize the caching times. Each query response is stored in the table and is recorded with the source of the data coming back (either the database or the cache), as well as the latency. A chart is also rendered and updated with each query to give a full picture of the efficiency of the cache. 
 
+## 🔮 Future Plans 🔮
+
+- Add client-side caching
+- Add an option for cache expiration
+- Expand functionality of the playground to include
+  - Button to clear the query field
+  - Button to clear the cache
+  - Add tab functionality in the query field
+
+## ⚠️ Reporting Issues ⚠️
+We are currently in beta and listening for any feedback and issues you may run into. If you are experiencing any difficulty with this module, please open a GitHub Issue. Thank you for your patience and ongoing support! 🙏
 
 
-## Future Plans
-
-- add client-side caching
-
-## Reporting Issues
-
-<!-- github issues -->
