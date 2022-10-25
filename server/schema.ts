@@ -52,14 +52,13 @@ import { client } from './server.tsx';
   Mutation: {
     setPeople: async (parent: any, arg:any, context: any, info: any) => 
     {
-      return await context.dc.flush(async() =>{
+    
         const modify = `UPDATE people SET name = '${arg.name}', mass = '${arg.mass}' WHERE _id = ${arg.characterNumber};`
         const result = await client.queryObject<string>(modify);
-        return result.query.result_type;})
+        await context.dc.flush();
+        return result.query.result_type;}
 
-    }
   }
-
 }
 
 
