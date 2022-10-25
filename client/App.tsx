@@ -1,7 +1,6 @@
 import { React } from '../deps.ts';
 
 import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-// import RenderGraph from './components/RenderGraph.tsx';
 
 const App = () => {
   //array of all the previous query responses, use for rendering data in the table and chart
