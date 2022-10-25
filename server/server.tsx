@@ -27,9 +27,6 @@ const dc = new DenoCache({
   }
 })
 
-//redis
-//console.log(await redis.ping());
-
 //database
 const databaseURL =
   'postgres://cdfnqalb:5M9CGQwdkSUEnyyRy7xTU5tixqFkVDaH@drona.db.elephantsql.com/cdfnqalb';
