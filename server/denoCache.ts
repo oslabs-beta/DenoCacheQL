@@ -6,7 +6,6 @@ import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
 
-
 export default class DenoCache {
   router: Router;
   route: string;
@@ -16,25 +15,21 @@ export default class DenoCache {
   jsBundle: any;
   js: any;
   html: any;
-  redis: any
+  redis: any;
 
   constructor(args: any) {
-   const {
-    typeDefs,
-    resolvers,
-    redisInfo,
-   } =args
+    const { typeDefs, resolvers, redisInfo } = args;
 
-   this.setSchema(typeDefs, resolvers);
-   this.router = new Router();
-   this.route = '/graphql';
-   this.redisConnect(redisInfo)
-   this.allowedMethods()
+    this.setSchema(typeDefs, resolvers);
+    this.router = new Router();
+    this.route = '/graphql';
+    this.redisConnect(redisInfo);
+    this.allowedMethods();
   }
 
   async redisConnect(redisInfo): any {
-     this.redis = await connect(redisInfo)
-     console.log(await this.redis.ping())
+    this.redis = await connect(redisInfo);
+    console.log(await this.redis.ping());
   }
 
   setSchema(typeDefs, resolvers): any {
@@ -44,50 +39,39 @@ export default class DenoCache {
     });
   }
 
-  async flush(callback: Function){
-    await this.redis.flushall() 
-    const res = await callback()
-    return res;
+  async flush() {
+    await this.redis.flushall();
+    return
   }
 
-  async cache({arg, info, context}: any, callback: Function) { 
+  async cache({ arg, info, context }: any, callback: Function) {
     //get redisKey
-    // console.log('arg', arg)
-    // console.log('resolver name', info.fieldName)
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
-    console.log(redisKey)
     //check redis for cached value
-    const data = await this.redis.exists(redisKey)
+    const data = await this.redis.exists(redisKey);
     if (data) {
       const result = await this.redis.get(redisKey);
-      console.log('data in redis', result)
       context.response.headers.set('Source', 'cache');
-      console.log ('type', typeof result)
       if (typeof result !== 'string') {
         let format = JSON.stringify(result);
-        let formattedResponse = JSON.parse(format)
-        console.log('formatted1', formattedResponse)
+        let formattedResponse = JSON.parse(format);
         return formattedResponse;
       } else {
-        let formattedResponse = JSON.parse(result)
-        console.log('formatted2', formattedResponse)
+        let formattedResponse = JSON.parse(result);
         return formattedResponse;
       }
-    }
-     else {
+    } else {
       const res = await callback();
-      console.log('response from cb', res)
-      await this.redis.set(redisKey, JSON.stringify(res))
+      await this.redis.set(redisKey, JSON.stringify(res));
       context.response.headers.set('Source', 'database');
       return res;
-     }
+    }
   }
-
 
   routes(): any {
     //serving our graphql IDE
 
-    const jsBundle = '/main.js';
+    const jsBundle = '/denocacheql.js';
     const js = `import React from "https://esm.sh/react@18.2.0";
     import ReactDOM from "https://esm.sh/react-dom@18.2.0";
     const App = ${App};
@@ -99,7 +83,6 @@ export default class DenoCache {
     <!DOCTYPE html>
     <html>
     <head>
-      <link rel="stylesheet" type="text/css" href="/static/style.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
       <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
       </head>
@@ -118,7 +101,7 @@ export default class DenoCache {
       #app {
         padding: 30px;
       }
-
+   
       #topContainer textarea {
       height: 250px;
       width: 98%;
@@ -134,52 +117,54 @@ export default class DenoCache {
      
       #requestForm,
       #results {
-       border: 1px solid rgba(55, 0, 255, 0.23);
-       border-radius: 4px;
       padding: 18px;
-
       height: fit-contents;
       background-color: #eae3e3;
     }
 
     #requestForm button {
-     float: right;
+      float: right;
       margin-top: 7px;
-     background-color: #48395c;
-     border-radius: 9px;
+      background-color: #48395c;
+      border-radius: 9px;
       color: white;
     }
 
     #queryResponse {
-     border: 1px solid rgba(55, 0, 255, 0.23);
-     padding: 30px;
-     border-radius: 4px;
+      border: 1px solid rgba(55, 0, 255, 0.23);
+      padding: 30px;
+      border-radius: 4px;
       height: 250px;
+      overflow: auto;
       overflow-wrap: break-word;
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
-    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+      rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
     }
-    #bottomContainer {
-    border: 1px solid rgba(55, 0, 255, 0.23);
-    padding: 0;
+    #topContainer, #bottomContainer {
+      border: 1px solid rgba(55, 0, 255, 0.23);
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      border-radius: 8px;
+      padding: 0;
   
     }
     #tableContainer {
       background-color: #212529;
+      height: 300px;
     }
     #tableResponse {
-    overflow-wrap: break-word;
-    width: 70%;
+      overflow-wrap: break-word;
+      width: 70%;
     }
     table {
-    text-align: center;
-    overflow: auto;
+      text-align: center;
+      overflow: auto;
     }
     #chart-container{
       padding:0;
+      height: 300px;
     }
     #myChart{
-    background-color: #ffffff;
+      background-color: #ffffff;
     }
     </style>
       <div id="app">${appHtml}</div>
@@ -204,21 +189,21 @@ export default class DenoCache {
       const start = Date.now();
       try {
         const { query, variables } = await request.body().value;
-        console.log('query:' , query )
-          const results= await graphql({
-            schema: this.schema,
-            source: query,
-            variableValues: variables,
-            contextValue: {response, request, dc:this},
-          });
-          // await this.redis.set(redisKey, JSON.stringify(results))
-          response.status = results.errors ? 500 : 200;
-          response.body = results;
-          const end = Date.now() - start;
-          // response.headers.set("Source", "database")
-          response.headers.set("X-Response-Time", end.toString())
-          return;
-        } catch (err) {
+        //console.log('query:' , query )
+        const results = await graphql({
+          schema: this.schema,
+          source: query,
+          variableValues: variables,
+          contextValue: { response, request, dc: this },
+        });
+        // await this.redis.set(redisKey, JSON.stringify(results))
+        response.status = results.errors ? 500 : 200;
+        response.body = results;
+        const end = Date.now() - start;
+        // response.headers.set("Source", "database")
+        response.headers.set('X-Response-Time', end.toString());
+        return;
+      } catch (err) {
         console.error(`${err}`);
         throw err;
       }
@@ -229,7 +214,4 @@ export default class DenoCache {
   allowedMethods(): any {
     return this.router.allowedMethods();
   }
-
- 
-
 }
