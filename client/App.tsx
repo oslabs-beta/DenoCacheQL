@@ -1,24 +1,24 @@
 import { React } from '../deps.ts';
 import { AppProps } from '../types.ts';
 import { queryResponse } from '../types.ts';
-import { Chart as Chartjs } from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-class MyType extends Chart.DatasetController {
+import  Chartjs  from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
 
-}
+//import  Chart  from 'https://deno.land/x/deplot/examples/chartjs.ts'
+//import  Chart  from 'https://cdn.jsdelivr.net/npm/chart.js'
 const App = () => {
   //array of all the previous query responses, use for rendering data in the table and chart
   const [queryHistory, setQueryHistory] = React.useState([]);
   const [responseData, setResponseData] = React.useState({});
 
   //array of times, which is passed to the RenderGraph component to chart the response times
-  const [responseTimes, setResponseTimes] = React.useState<number[]>([]);
+  const [responseTimes, setResponseTimes] = React.useState<string[]>([]);
 
   //component for rendering a line graph to visualize response times
   const RenderGraph = ({ responseTimes }: AppProps) => {
     
     //array to store labels for the query number to display on x-axis
     const graphLabels:number[] = [];
-    responseTimes.map((el:number, i:number) => {
+    responseTimes.map((el:string, i:number) => {
       graphLabels.push(i + 1);
     });
 
@@ -31,11 +31,11 @@ const App = () => {
     //grabs the DOM element to render the chart
    const canvaEl =  document.getElementById('myChart') as HTMLCanvasElement 
    
-   const ctx :CanvasRenderingContext2D  = canvaEl.getContext('2d');
+   const ctx :CanvasRenderingContext2D  = canvaEl.getContext('2d')!;
     
 
     //creates the chart
-    const myChart = new Chart(ctx: CanvasRenderingContext2D, {
+    const myChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: graphLabels,
@@ -58,12 +58,12 @@ const App = () => {
   };
 
   //--------------------------------------
-  const handleSubmitQuery = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSubmitQuery = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const queryTextBox: string | undefined = e.target[0].value;
     // let queryResponse: object = { response: null, source: null, time: null };
-    let queryResponse: queryResponse = {};
+    const queryResponse: queryResponse = {};
 
 
     //submit request, sending user's query in the request body
@@ -155,7 +155,7 @@ const App = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {queryHistory.map((historyItem: any, i: number) => {
+                  {queryHistory.map((historyItem: queryResponse, i: number) => {
                     console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(

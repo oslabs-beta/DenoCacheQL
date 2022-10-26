@@ -1,16 +1,12 @@
 export type AppProps = {
-  responseTimes: Array<number>
-}
-
-export type Canvas = {
-  
+  responseTimes: Array<string>
 }
 
 export type queryResponse = {
   response?: object;
   source?: string | null;
   time?: string | null;
-}
+};
 
 export type RedisInfo = {
     hostname: string,

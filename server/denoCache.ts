@@ -1,11 +1,12 @@
-import { Router, Context } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
+import { Router } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
+import { Middleware } from "https://deno.land/x/oak@v10.6.0/middleware.ts";
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
 import { type ITypeDefinitions } from "https://deno.land/x/graphql_tools@0.0.2/utils/index.ts";
-import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
+import { graphql, GraphQLSchema } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
-import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
 import {
   RedisInfo,
   DenoCacheArgs,
@@ -14,11 +15,8 @@ import {
 export default class DenoCache {
   router: Router;
   route: string;
-  schema: any;
-  jsBundle: any;
-  js: any;
-  html: any;
-  redis: any;
+  schema: GraphQLSchema|undefined;
+  redis: Redis|undefined;
 
   constructor(args: DenoCacheArgs) {
     const { typeDefs, resolvers, redisInfo } = args;
@@ -41,14 +39,21 @@ export default class DenoCache {
   }
 
   async flush() {
+    if (this.redis!=undefined){
     await this.redis.flushall();
     return
+    }
+    return;
   }
 
   async cache({ arg, info, context }: any, callback: Function) {
     //get redisKey
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
     //check redis for cached value
+    if (this.redis===undefined) {
+       return;//error
+    }
+    
     const data = await this.redis.exists(redisKey);
     if (data) {
       const result = await this.redis.get(redisKey);
@@ -63,13 +68,15 @@ export default class DenoCache {
       }
     } else {
       const res = await callback();
-      await this.redis.set(redisKey, JSON.stringify(res));
+      if (this.redis) {
+        await this.redis.set(redisKey, JSON.stringify(res));
+      }
       context.response.headers.set('Source', 'database');
       return res;
     }
   }
 
-  routes(): any {
+  routes(): Middleware {
     //serving our graphql IDE
 
     const jsBundle = '/denocacheql.js';
@@ -189,6 +196,9 @@ export default class DenoCache {
       const { response, request } = ctx;
       const start = Date.now();
       try {
+        if (this.schema === undefined){
+          return//error
+        }
         const { query, variables } = await request.body().value;
         //console.log('query:' , query )
         const results = await graphql({
@@ -212,7 +222,7 @@ export default class DenoCache {
     return this.router.routes();
   }
 
-  allowedMethods(): any {
+  allowedMethods(): Middleware {
     return this.router.allowedMethods();
   }
 }
