@@ -2,11 +2,16 @@ export type AppProps = {
   responseTimes: Array<string>
 }
 
+// export declare class Chart {
+//   id: string;
+// }
 export type queryResponse = {
-  response?: object;
+  response?: Record<string, unknown>;
   source?: string | null;
   time?: string | null;
 };
+
+export type latency = Array<string | null>;
 
 export type RedisInfo = {
     hostname: string,
