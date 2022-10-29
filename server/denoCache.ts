@@ -1,5 +1,5 @@
-import { Router } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
-import { Middleware } from "https://deno.land/x/oak@v10.6.0/middleware.ts";
+import { Router } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
+import { Middleware } from "https://deno.land/x/oak@v11.1.0/middleware.ts";
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
 import { type ITypeDefinitions } from "https://deno.land/x/graphql_tools@0.0.2/utils/index.ts";
 import { graphql, GraphQLSchema } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
@@ -46,7 +46,7 @@ export default class DenoCache {
     return;
   }
 
-  async cache({ arg, info, context }: any, callback: Function) {
+  async cache({ parent, arg, info, context }: any, callback: Function) {
     //get redisKey
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
     //check redis for cached value
@@ -200,7 +200,6 @@ export default class DenoCache {
           return//error
         }
         const { query, variables } = await request.body().value;
-        //console.log('query:' , query )
         const results = await graphql({
           schema: this.schema,
           source: query,

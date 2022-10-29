@@ -34,7 +34,7 @@ import { client } from './server.tsx';
    const resolvers = {
   Query: {
     getPeople: async (parent: any, arg: any, context: any, info: any) => {
-    return await context.dc.cache({arg,info,context}, async() => {       
+    return await context.dc.cache({parent,arg,context,info}, async() => {       
         const sqlQuery = `SELECT name,mass, hair_color, skin_color, eye_color, birth_year, gender, height, species_id FROM people WHERE _id=${arg.characterNumber}`;
         const character = await client.queryObject<string>(sqlQuery);
         character.rows[0].species_id = Number(character.rows[0].species_id)
@@ -44,8 +44,8 @@ import { client } from './server.tsx';
   },
   People: {
     species: async (parent: any, arg: any, info: any) => {
-              const redisKey = `SELECT name, classification FROM species WHERE _id=${parent.species_id}`;
-              const character = await client.queryObject<string>(redisKey);
+              const sqlQuery = `SELECT name, classification FROM species WHERE _id=${parent.species_id}`;
+              const character = await client.queryObject<string>(sqlQuery);
               return character.rows
   }
 },  
