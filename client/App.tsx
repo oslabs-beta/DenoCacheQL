@@ -1,31 +1,39 @@
 import { React } from '../deps.ts';
+import { AppProps } from '../types.ts';
+import { queryResponse } from '../types.ts';
+import { latency } from '../types.ts';
+import  Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
 
-import Chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-
+//import  Chart  from 'https://deno.land/x/deplot/examples/chartjs.ts'
+//import  Chart  from 'https://cdn.jsdelivr.net/npm/chart.js'
 const App = () => {
   //array of all the previous query responses, use for rendering data in the table and chart
-  const [queryHistory, setQueryHistory] = React.useState([]);
+  const [queryHistory, setQueryHistory] = React.useState<queryResponse[]>([]);
   const [responseData, setResponseData] = React.useState({});
 
   //array of times, which is passed to the RenderGraph component to chart the response times
-  const [responseTimes, setResponseTimes] = React.useState([]);
+  const [responseTimes, setResponseTimes] = React.useState<latency>([]);
 
   //component for rendering a line graph to visualize response times
-  const RenderGraph = ({ responseTimes }) => {
+  const RenderGraph = ({ responseTimes }: AppProps) => {
+   
     //array to store labels for the query number to display on x-axis
-    let graphLabels = [];
-    responseTimes.map((el, i) => {
+    const graphLabels:number[] = [];
+    responseTimes.map((el:string, i:number) => {
       graphLabels.push(i + 1);
     });
 
     // check if the DOM element exists
-    let chartStatus = Chart.getChart('myChart'); // <canvas> id
+    const chartStatus = Chart.getChart('myChart'); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
     }
 
     //grabs the DOM element to render the chart
-    const ctx = document.getElementById('myChart').getContext('2d');
+   const canvaEl =  document.getElementById('myChart') as HTMLCanvasElement 
+   
+   const ctx :CanvasRenderingContext2D  = canvaEl.getContext('2d')!;
+    
 
     //creates the chart
     const myChart = new Chart(ctx, {
@@ -51,11 +59,14 @@ const App = () => {
   };
 
   //--------------------------------------
-  const handleSubmitQuery = async (e: Event) => {
+  const handleSubmitQuery = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    console.log('e.target--', e)
+    const queryTextBox: string | undefined = target[0].value;
+    // let queryResponse: object = { response: null, source: null, time: null };
+    const queryResponse: queryResponse = {};
 
-    const queryTextBox: string | undefined = e.target[0].value;
-    let queryResponse: object = { response: null, source: null, time: null };
 
     //submit request, sending user's query in the request body
     try {
@@ -85,9 +96,9 @@ const App = () => {
       }
       
       queryResponse.time = response.headers.get('x-response-time');
-      let tempArray = [...queryHistory, queryResponse];
+      const tempArray = [...queryHistory, queryResponse];
       setQueryHistory(tempArray);
-      let tempResponseTimes = [...responseTimes, queryResponse.time];
+      const tempResponseTimes: Array<string | null>= [...responseTimes, queryResponse.time];
       setResponseTimes(tempResponseTimes);
 
      //update the responseData variable to display in the response area according to whether or not it is a result of a query. If the response is sent back with a 'source' (either cache or databse), then it is a query. 
@@ -146,7 +157,7 @@ const App = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {queryHistory.map((historyItem: any, i: number) => {
+                  {queryHistory.map((historyItem: queryResponse, i: number) => {
                     console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(
@@ -173,6 +184,7 @@ const App = () => {
             </div>
           </div>
           <React.Suspense>
+            {/* {RenderGraph(responseTimes)} */}
             <RenderGraph responseTimes={responseTimes} />
           </React.Suspense>
         </div>
