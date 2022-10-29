@@ -1,25 +1,25 @@
-import { Router, Context } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
+import { Router } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
+import { Middleware } from "https://deno.land/x/oak@v11.1.0/middleware.ts";
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
-import { graphql } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
+import { type ITypeDefinitions } from "https://deno.land/x/graphql_tools@0.0.2/utils/index.ts";
+import { graphql, GraphQLSchema } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
-import { connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
+import {
+  RedisInfo,
+  DenoCacheArgs,
+} from '../types.ts'
 
-export default class DenoCache {
+export default class DenoCacheQL {
   router: Router;
   route: string;
-  typeDefs: any;
-  resolvers: any;
-  schema: any;
-  jsBundle: any;
-  js: any;
-  html: any;
-  redis: any;
+  schema: GraphQLSchema|undefined;
+  redis: Redis|undefined;
 
-  constructor(args: any) {
+  constructor(args: DenoCacheArgs) {
     const { typeDefs, resolvers, redisInfo } = args;
-
     this.setSchema(typeDefs, resolvers);
     this.router = new Router();
     this.route = '/graphql';
@@ -27,48 +27,56 @@ export default class DenoCache {
     this.allowedMethods();
   }
 
-  async redisConnect(redisInfo): any {
+  async redisConnect(redisInfo: RedisInfo) {
     this.redis = await connect(redisInfo);
-    console.log(await this.redis.ping());
   }
 
-  setSchema(typeDefs, resolvers): any {
+  setSchema(typeDefs: Record<string, unknown>, resolvers: ITypeDefinitions): void {
     this.schema = makeExecutableSchema({
       typeDefs: typeDefs.typeDefs,
-      resolvers: resolvers.resolvers || {},
+      resolvers: resolvers.resolvers,
     });
   }
 
   async flush() {
+    if (this.redis!=undefined){
     await this.redis.flushall();
     return
+    }
+    return;
   }
 
-  async cache({ arg, info, context }: any, callback: Function) {
+  async cache({ parent, arg, info, context }: any, callback: Function) {
     //get redisKey
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
     //check redis for cached value
+    if (this.redis===undefined) {
+       return;//error
+    }
+    
     const data = await this.redis.exists(redisKey);
     if (data) {
       const result = await this.redis.get(redisKey);
       context.response.headers.set('Source', 'cache');
       if (typeof result !== 'string') {
-        let format = JSON.stringify(result);
-        let formattedResponse = JSON.parse(format);
+        const format = JSON.stringify(result);
+        const formattedResponse = JSON.parse(format);
         return formattedResponse;
       } else {
-        let formattedResponse = JSON.parse(result);
+        const formattedResponse = JSON.parse(result);
         return formattedResponse;
       }
     } else {
       const res = await callback();
-      await this.redis.set(redisKey, JSON.stringify(res));
+      if (this.redis) {
+        await this.redis.set(redisKey, JSON.stringify(res));
+      }
       context.response.headers.set('Source', 'database');
       return res;
     }
   }
 
-  routes(): any {
+  routes(): Middleware {
     //serving our graphql IDE
 
     const jsBundle = '/denocacheql.js';
@@ -188,8 +196,10 @@ export default class DenoCache {
       const { response, request } = ctx;
       const start = Date.now();
       try {
+        if (this.schema === undefined){
+          return//error
+        }
         const { query, variables } = await request.body().value;
-        //console.log('query:' , query )
         const results = await graphql({
           schema: this.schema,
           source: query,
@@ -211,7 +221,7 @@ export default class DenoCache {
     return this.router.routes();
   }
 
-  allowedMethods(): any {
+  allowedMethods(): Middleware {
     return this.router.allowedMethods();
   }
 }

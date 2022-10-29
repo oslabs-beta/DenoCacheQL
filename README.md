@@ -16,20 +16,20 @@ With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries
 ### How to set up the DenoCacheQL 
 
 To set up your server to use DenoCacheQL: 
- - Import DenoCacheQL, resolvers, and typeDefs.
+ - Import DenoCacheQL, your resolvers, and your typeDefs.
  - Make sure the redis server is up and running.
- - Create a new instance of DenoCache.
- - Configure the server to use DenoCache routes.
+ - Create a new instance of DenoCacheQL.
+ - Configure the server to use DenoCacheQL routes.
 
 Example set up:
 
 ```
 //import 
-import  DenoCache  from './denoCache.ts' *replace link
+import  DenoCacheQL  from './denoCache.ts' *replace link
 import {resolvers, typeDefs} from "./schema.ts" 
 
 //creating a new instance
-const dc = new DenoCache({
+const dc = new DenoCacheQL({
   typeDefs,
   resolvers, 
   redisInfo: {
@@ -42,11 +42,14 @@ const dc = new DenoCache({
 //using DC routes
 app.use(dc.routes());
 app.use(dc.allowedMethods());
+
+//exporting to use in your resolver logic
+export { dc };
 ```
 
 ### How To Implement Caching Functionailty
 
-Once you've imported the module and created your DenoCache instance, you'll be able to access the DenoCache functions from the context argument.  Because DenoCache implmentation is modular, you can choose the specific resolvers in which you want to use the caching functionality.  One easy way to implement the caching functionality is by wrapping your resolver logic as a callback inside the DenoCache cache function, as demonstrated below.
+Once you've imported the module and created your DenoCacheQL instance, you'll be able to access the DenoCacheQL functions from the context argument.  Because DenoCacheQL implementation is modular, you can choose the specific resolvers in which you want to use the caching functionality.  One easy way to implement the caching functionality is by wrapping your resolver logic as a callback inside the DenoCacheQL cache function, as demonstrated below.
  
 ```
 const resolvers = {
@@ -76,7 +79,7 @@ const resolvers = {
   ```
 ### How to clear the cache
 
-If you would like to mutate your data and clear the cache at the same time so that incorrect data doesn't remain in the cache, DenoCache provides a flush function. Call this function whenever you would like to clear the cache, or you may use the redis.flushall() in the redis terminal. 
+If you would like to mutate your data and clear the cache at the same time so that incorrect data doesn't remain in the cache, DenoCacheQL provides a flush function. Call this function whenever you would like to clear the cache, or you may use the redis.flushall() in the redis terminal. 
 
 ```
 Mutation: {
