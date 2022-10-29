@@ -111,7 +111,6 @@ export default class DenoCacheQL {
       }
    
       #topContainer textarea {
-      height: 250px;
       width: 98%;
       border: 1px solid rgb(158, 185, 195);
       border-radius: 4px;
@@ -120,9 +119,17 @@ export default class DenoCacheQL {
       overflow-wrap: break-word;
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
       rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
-      padding: 30px;
+      padding: 20px;
       }
-     
+      
+      #query_text_box{
+        min-height: 120px;
+      }
+
+      #variables_text_box{
+        height: fit-contents;
+      }
+
       #requestForm,
       #results {
       padding: 18px;
@@ -140,7 +147,7 @@ export default class DenoCacheQL {
 
     #queryResponse {
       border: 1px solid rgba(55, 0, 255, 0.23);
-      padding: 30px;
+      padding: 20px;
       border-radius: 4px;
       height: 250px;
       overflow: auto;
