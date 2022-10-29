@@ -42,6 +42,9 @@ const dc = new DenoCacheQL({
 //using DC routes
 app.use(dc.routes());
 app.use(dc.allowedMethods());
+
+//exporting to use in your resolver logic
+export { dc };
 ```
 
 ### How To Implement Caching Functionailty
