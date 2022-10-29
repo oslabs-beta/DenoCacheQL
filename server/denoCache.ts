@@ -12,7 +12,7 @@ import {
   DenoCacheArgs,
 } from '../types.ts'
 
-export default class DenoCache {
+export default class DenoCacheQL {
   router: Router;
   route: string;
   schema: GraphQLSchema|undefined;

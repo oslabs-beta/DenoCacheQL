@@ -6,7 +6,7 @@ import {
 } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
 import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts';
-import  DenoCache  from './denoCache.ts'
+import  DenoCacheQL  from './denoCache.ts'
 import resolvers from "./schema.ts"
 import typeDefs from "./schema.ts"
 import schema from "./schema.ts"
@@ -16,7 +16,7 @@ const router = new Router();
 
 const PORT = 3000;
 
-const dc = new DenoCache({
+const dc = new DenoCacheQL({
   typeDefs,
   resolvers, 
   redisInfo: {
