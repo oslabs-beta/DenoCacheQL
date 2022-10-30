@@ -62,7 +62,7 @@ const App = () => {
     const target = e.target as HTMLFormElement;
     console.log('e.target--', e);
     const queryTextBox: string | undefined = target[0].value;
-    // let queryResponse: object = { response: null, source: null, time: null };
+    const variableTextBox: string | undefined = target[1].value;
     const queryResponse: queryResponse = {};
 
     //submit request, sending user's query in the request body
@@ -75,6 +75,7 @@ const App = () => {
         },
         body: JSON.stringify({
           query: queryTextBox,
+          variables: variableTextBox,
         }),
       });
       //backend checks redis, then db, then returns response
