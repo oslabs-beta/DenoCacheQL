@@ -60,11 +60,9 @@ const App = () => {
   const handleSubmitQuery = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    console.log('e.target--', e);
     const queryTextBox: string | undefined = target[0].value;
-    const variableTextBox: string | undefined = target[1].value;
+    const variableTextBox: string = target[1].value;
     const queryResponse: queryResponse = {};
-
     //submit request, sending user's query in the request body
     try {
       const response = await fetch('/graphql', {
@@ -73,10 +71,11 @@ const App = () => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
+
         body: JSON.stringify({
           query: queryTextBox,
-          variables: variableTextBox,
-        }),
+          variables: variableTextBox
+        })
       });
       //backend checks redis, then db, then returns response
       //take the response, the source of the response (cache vs server), and response time, and store it in the queryResponse object which will be added to the queryHistory array.
