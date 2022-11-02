@@ -1,22 +1,22 @@
 import { Router } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
-import { Middleware } from "https://deno.land/x/oak@v11.1.0/middleware.ts";
+import { Middleware } from 'https://deno.land/x/oak@v11.1.0/middleware.ts';
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
-import { type ITypeDefinitions } from "https://deno.land/x/graphql_tools@0.0.2/utils/index.ts";
-import { graphql, GraphQLSchema } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
+import { type ITypeDefinitions } from 'https://deno.land/x/graphql_tools@0.0.2/utils/index.ts';
+import {
+  graphql,
+  GraphQLSchema,
+} from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
 import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
-import {
-  RedisInfo,
-  DenoCacheArgs,
-} from '../types.ts'
+import { RedisInfo, DenoCacheArgs } from './types.ts';
 
 export default class DenoCacheQL {
   router: Router;
   route: string;
-  schema: GraphQLSchema|undefined;
-  redis: Redis|undefined;
+  schema: GraphQLSchema | undefined;
+  redis: Redis | undefined;
 
   constructor(args: DenoCacheArgs) {
     const { typeDefs, resolvers, redisInfo } = args;
@@ -31,7 +31,10 @@ export default class DenoCacheQL {
     this.redis = await connect(redisInfo);
   }
 
-  setSchema(typeDefs: Record<string, unknown>, resolvers: ITypeDefinitions): void {
+  setSchema(
+    typeDefs: Record<string, unknown>,
+    resolvers: ITypeDefinitions
+  ): void {
     this.schema = makeExecutableSchema({
       typeDefs: typeDefs.typeDefs,
       resolvers: resolvers.resolvers,
@@ -39,9 +42,9 @@ export default class DenoCacheQL {
   }
 
   async flush() {
-    if (this.redis!=undefined){
-    await this.redis.flushall();
-    return
+    if (this.redis != undefined) {
+      await this.redis.flushall();
+      return;
     }
     return;
   }
@@ -50,10 +53,10 @@ export default class DenoCacheQL {
     //get redisKey
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
     //check redis for cached value
-    if (this.redis===undefined) {
-       return;//error
+    if (this.redis === undefined) {
+      return; //error
     }
-    
+
     const data = await this.redis.exists(redisKey);
     if (data) {
       const result = await this.redis.get(redisKey);
@@ -111,7 +114,6 @@ export default class DenoCacheQL {
       }
    
       #topContainer textarea {
-      height: 250px;
       width: 98%;
       border: 1px solid rgb(158, 185, 195);
       border-radius: 4px;
@@ -120,9 +122,17 @@ export default class DenoCacheQL {
       overflow-wrap: break-word;
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
       rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
-      padding: 30px;
+      padding: 20px;
       }
-     
+      
+      #query_text_box{
+        min-height: 120px;
+      }
+
+      #variables_text_box{
+        height: fit-contents;
+      }
+
       #requestForm,
       #results {
       padding: 18px;
@@ -140,7 +150,7 @@ export default class DenoCacheQL {
 
     #queryResponse {
       border: 1px solid rgba(55, 0, 255, 0.23);
-      padding: 30px;
+      padding: 20px;
       border-radius: 4px;
       height: 250px;
       overflow: auto;
@@ -196,14 +206,14 @@ export default class DenoCacheQL {
       const { response, request } = ctx;
       const start = Date.now();
       try {
-        if (this.schema === undefined){
-          return//error
+        if (this.schema === undefined) {
+          return; //error
         }
         const { query, variables } = await request.body().value;
         const results = await graphql({
           schema: this.schema,
           source: query,
-          variableValues: variables,
+          variableValues: (typeof variables === "string") ? JSON.parse(variables) : variables,
           contextValue: { response, request, dc: this },
         });
         // await this.redis.set(redisKey, JSON.stringify(results))

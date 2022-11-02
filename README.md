@@ -9,7 +9,7 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 
 ## What is DenoCacheQL
 
-With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries on their Redis server for more efficient queries. The DenoCacheQL playground allows a developer to test their GraphQL queries, receiving back the responses from their queries, the response times, and the response source (database or cache).  We've also included a graph of the reposonse time for easy latency visualization.
+With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries on their Redis server for more efficient queries. The DenoCacheQL playground allows a developer to test their GraphQL queries, receiving back the responses from their queries, the response times, and the response source (database or cache).  We've also included a graph of the response time for easy latency visualization.
 
 ## 📖 Getting Started 📖
 
