@@ -6,12 +6,18 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 <div align = 'center'>
 <img src = "https://github.com/oslabs-beta/DenoGraphQL/blob/main/assets/readme/DQL%20cover%20photo%20readme(600%20%C3%97%20275%20px)%20for%20readme.png?raw=true" alt = "banner" />
 
+
 <div id='badges'>
-<a href = "#"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oslabs-beta/DenoCacheQL"></a>
-<a href = "https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/DenoCacheQL">
+<a href = "https://deno.land/x/denocacheql@v0.0.2"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oslabs-beta/DenoCacheQL"/></a>
+<a href ="https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/oslabs-beta/DenoCacheQL"/></a>
+<a href = "https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/DenoCacheQL"/>
 </a>
-<a href = "https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/DenoCacheQL"></a>
-<a href = "https://github.com/oslabs-beta/DenoCacheQL/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/oslabs-beta/DenoCacheQL"></a>
+<a href = "https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/DenoCacheQL"/></a>
+<a href = "https://github.com/oslabs-beta/DenoCacheQL/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/oslabs-beta/DenoCacheQL"/></a>
+
+<a href = "https://deno.land/x/denocacheql"><img alt = "Deno" src="https://shield.deno.dev/x/denocacheql"/></a>
+<a href = "https://deno.land/x/denocacheql"><img alt = "Deno" src="https://shield.deno.dev/deno/denocacheql"/></a>
+
 <a href ="https://www.linkedin.com/company/denocacheql-open-source/"><img src = 'https://img.shields.io/badge/LinkedIn-blue'/></a>
 
 <p>A light-weight caching solution for GraphQL with Deno</p>
