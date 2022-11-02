@@ -10,7 +10,7 @@ import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
-import { RedisInfo, DenoCacheArgs } from '../types.ts';
+import { RedisInfo, DenoCacheArgs } from './types.ts';
 
 export default class DenoCacheQL {
   router: Router;
@@ -210,10 +210,17 @@ export default class DenoCacheQL {
           return; //error
         }
         const { query, variables } = await request.body().value;
+        let parsedVar: Record<string, unknown>;
+        if (variables && typeof variables === "string"){
+          parsedVar = JSON.parse(variables)
+        }
+        else {
+          parsedVar = variables;
+        }
         const results = await graphql({
           schema: this.schema,
           source: query,
-          variableValues: (typeof variables === "string") ? JSON.parse(variables) : variables,
+          variableValues: parsedVar,
           contextValue: { response, request, dc: this },
         });
         // await this.redis.set(redisKey, JSON.stringify(results))
