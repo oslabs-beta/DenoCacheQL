@@ -8,7 +8,7 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 
 
 <div id='badges'>
-<a href = "https://deno.land/x/denocacheql@v0.0.2"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oslabs-beta/DenoCacheQL"/></a>
+<a href = "https://deno.land/x/denocacheql"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oslabs-beta/DenoCacheQL"/></a>
 <a href ="https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/oslabs-beta/DenoCacheQL"/></a>
 <a href = "https://github.com/oslabs-beta/DenoCacheQL"><img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/DenoCacheQL"/>
 </a>
@@ -40,8 +40,10 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
   With DenoCacheQL, a developer can quickly and easily cache their GraphQL queries on their Redis server for more efficient queries. The DenoCacheQL playground allows a developer to test their GraphQL queries, receiving back the responses from their queries, the response times, and the response source (database or cache).  We've also included a graph of the response time for easy latency visualization.
 
 ## <a name = "getting-started"></a>📖 Getting Started 📖
-
   ### <a name = "set-up"></a>How to set up the DenoCacheQL 
+```
+https://deno.land/x/denocacheql
+```
 
   To set up your server to use DenoCacheQL: 
   - Import DenoCacheQL, your resolvers, and your typeDefs.
@@ -49,11 +51,15 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
   - Create a new instance of DenoCacheQL.
   - Configure the server to use DenoCacheQL routes.
 
+  Add this line to your deno.config (or tsconfig.json)
+  ```
+   "include": ["dql_playground/**/*"],
+  ```
   Example set up:
 
 ```
 //import 
-import  DenoCacheQL  from './denoCache.ts' *replace link
+import  DenoCacheQL  from 'https://deno.land/x/denocacheql'
 import {resolvers, typeDefs} from "./schema.ts" 
 
 //creating a new instance
@@ -141,7 +147,7 @@ Mutation: {
     - Add tab functionality in the query field
 
 ## Want to Contribute? 
-  We welcome contributions to our open-source project, feel free to fork and clone this repo. Happy Coding!
+  We welcome contributions to our open-source project, feel free to make a PR or reach out to us via LinkedIn. Happy Coding!
 
 
 ## <a name = "reporting-issues"></a>⚠️ Reporting Issues ⚠️
