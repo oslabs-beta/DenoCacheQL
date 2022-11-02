@@ -10,7 +10,7 @@ import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
 import App from '../client/App.tsx';
 import { React } from '../deps.ts';
 import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
-import { RedisInfo, DenoCacheArgs } from '../types.ts';
+import { RedisInfo, DenoCacheArgs } from './types.ts';
 
 export default class DenoCacheQL {
   router: Router;
