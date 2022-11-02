@@ -133,7 +133,7 @@ We built the bottom half of the playground to visualize the caching times. Each 
   ### Want to Contribute? 
 
 
-## <a name = "Reporting Issues"></a>⚠️ Reporting Issues ⚠️
+## <a name = "reporting-issues"></a>⚠️ Reporting Issues ⚠️
 We are currently in beta and listening for any feedback and issues you may run into. If you are experiencing any difficulty with this module, please open a GitHub Issue. Thank you for your patience and ongoing support! 🙏
 
 
