@@ -3,7 +3,7 @@ import { Application } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
 //Postgres connection
 import { Client } from 'https://deno.land/x/postgres@v0.16.1/mod.ts';
 //importing DenoCache, resolvers, and typedefs
-import  {DenoCacheQL}  from 'https://deno.land/x/denocacheql@v0.0.1/mod.ts'
+import  {DenoCacheQL}  from 'https://deno.land/x/denocacheql@v0.0.2/mod.ts'
 import resolvers from "./schema.ts"
 import typeDefs from "./schema.ts"
 
