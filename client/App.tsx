@@ -59,9 +59,12 @@ const App = () => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const queryTextBox: string | undefined = target[0].value;
-    const variableTextBox: string = target[1].value;
+    let variableTextBox: string | undefined= target[1].value;
     const queryResponse: queryResponse = {};
     //submit request, sending user's query in the request body
+    if (variableTextBox === '') {
+      variableTextBox = undefined;
+    }
     try {
       const response = await fetch('/graphql', {
         method: 'POST',
