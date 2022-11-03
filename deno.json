@@ -3,6 +3,6 @@
     "start": "deno run --allow-net --allow-read --allow-env server/server.tsx"
   },
 
-  "include": ["client/**/*"]
+  "include": ["dql_playground/**/*"]
 
 }
