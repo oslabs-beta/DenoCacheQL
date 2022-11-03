@@ -13,7 +13,8 @@
       "ScriptHost",
       "deno.ns"]
   },
-  "include": ["client/**/*"],
+  "include": ["dql_playground/**/*"]
+
   "strict": true,
   "esModuleInterop": true,
   "skipLibCheck": true,
