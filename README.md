@@ -156,7 +156,6 @@ Mutation: {
 - Michelle Hindt <a href="www.linkedin.com/in/michelle-hindt"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a>
 
 
+
 ## <a name = "reporting-issues"></a>⚠️ Reporting Issues ⚠️
   We are currently in beta and listening for any feedback and issues you may run into. If you are experiencing any difficulty with this module, please open a GitHub Issue. Thank you for your patience and ongoing support! 🙏
-
-
