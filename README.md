@@ -153,7 +153,7 @@ Mutation: {
 - Jessica Balding <a href="https://www.linkedin.com/in/jessica-balding/"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a> </a>
 - Han Li <a href="https://www.linkedin.com/in/zihan-han-li/"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a> 
 - Regina Kwan <a href= "https://www.linkedin.com/in/reginakwan/"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a>
-- Michelle Hindt <a href="www.linkedin.com/in/michelle-hindt"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a>
+- Michelle Hindt <a href="https://www.linkedin.com/in/michelle-hindt/"><img src = "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="15" align="center"/></a>
 
 
 
