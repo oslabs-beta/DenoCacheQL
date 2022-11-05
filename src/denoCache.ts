@@ -1,16 +1,22 @@
+//imports for oak middleware
 import { Router } from 'https://deno.land/x/oak@v11.1.0/mod.ts';
 import { Middleware } from 'https://deno.land/x/oak@v11.1.0/middleware.ts';
+
+//imports from graphql_tools for building scheme and type definitions for TypeScript
 import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts';
 import { type ITypeDefinitions } from 'https://deno.land/x/graphql_tools@0.0.2/utils/index.ts';
+
+//library for setting up GraphQL with Deno
 import {
   graphql,
   GraphQLSchema,
 } from 'https://deno.land/x/graphql_deno@v15.0.0/mod.ts';
-import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
-import App from '../client/App.tsx';
-import { React } from '../deps.ts';
+
 import { Redis, connect } from 'https://deno.land/x/redis@v0.26.0/mod.ts';
-import { RedisInfo, DenoCacheArgs } from '../types.ts';
+import ReactDOMServer from 'https://esm.sh/react-dom@18.2.0/server';
+import App from '../dql_playground/App.tsx';
+import { React } from '../deps.ts';
+import { RedisInfo, DenoCacheArgs } from './types.ts';
 
 export default class DenoCacheQL {
   router: Router;
@@ -19,18 +25,22 @@ export default class DenoCacheQL {
   redis: Redis | undefined;
 
   constructor(args: DenoCacheArgs) {
+    //user passes in their typeDefs, resolvers, redisInfo for DenoCacheQL to use
     const { typeDefs, resolvers, redisInfo } = args;
     this.setSchema(typeDefs, resolvers);
-    this.router = new Router();
-    this.route = '/graphql';
+    this.router = new Router(); //creates a new router from oak
+    this.route = '/graphql'; //creates our endpoint for the front end
     this.redisConnect(redisInfo);
     this.allowedMethods();
   }
 
+  //connect to Redis server
   async redisConnect(redisInfo: RedisInfo) {
     this.redis = await connect(redisInfo);
   }
 
+
+  //build a schema for GraphQL to reference based on the user's typeDefs and resolvers
   setSchema(
     typeDefs: Record<string, unknown>,
     resolvers: ITypeDefinitions
@@ -41,6 +51,7 @@ export default class DenoCacheQL {
     });
   }
 
+  //flush the Redis cache
   async flush() {
     if (this.redis != undefined) {
       await this.redis.flushall();
@@ -49,15 +60,21 @@ export default class DenoCacheQL {
     return;
   }
 
+  //function to check the cache to see if the resolver exists in the cache
+    //if it does not exist in the cache, then check the database and store it in the cache
   async cache({ parent, arg, info, context }: any, callback: Function) {
     //get redisKey
     const redisKey = info.fieldName + ' ' + JSON.stringify(arg);
-    //check redis for cached value
+    
+    //check for a redis connection
     if (this.redis === undefined) {
       return; //error
     }
 
+    //if the data exists in the cache, pull the data from the Redis cache
+      //if the data does not exist, Redis returns 0
     const data = await this.redis.exists(redisKey);
+    //this checks if the data is in redis
     if (data) {
       const result = await this.redis.get(redisKey);
       context.response.headers.set('Source', 'cache');
@@ -70,7 +87,9 @@ export default class DenoCacheQL {
         return formattedResponse;
       }
     } else {
+      //the data does not exist in the Redis cache, store the data in Redis cache and return the response
       const res = await callback();
+      //typeScript checking if connected to Redis 
       if (this.redis) {
         await this.redis.set(redisKey, JSON.stringify(res));
       }
@@ -81,7 +100,6 @@ export default class DenoCacheQL {
 
   routes(): Middleware {
     //serving our graphql IDE
-
     const jsBundle = '/denocacheql.js';
     const js = `import React from "https://esm.sh/react@18.2.0";
     import ReactDOM from "https://esm.sh/react-dom@18.2.0";
@@ -192,6 +210,7 @@ export default class DenoCacheQL {
     </body>
   </html>`;
 
+    //serves front-end to /graphql
     this.router.get(this.route, (context) => {
       context.response.type = 'text/html';
       context.response.body = html;

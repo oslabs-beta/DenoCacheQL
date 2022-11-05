@@ -1,7 +1,4 @@
 {
-  "tasks": {
-    "start": "deno run --allow-net --allow-read --allow-env server/server.tsx"
-  },
   "compilerOptions": {
     "jsx": "react",
     "jsxFactory": "React.createElement",
@@ -16,7 +13,7 @@
       "ScriptHost",
       "deno.ns"]
   },
-  "include": ["client/**/*"],
+  "include": ["dql_playground/**/*"],
   "strict": true,
   "esModuleInterop": true,
   "skipLibCheck": true,
