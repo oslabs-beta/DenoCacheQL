@@ -165,7 +165,6 @@ const App = () => {
                 </thead>
                 <tbody>
                   {queryHistory.map((historyItem: queryResponse, i: number) => {
-                    // console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(
                       historyItem.response
@@ -191,7 +190,6 @@ const App = () => {
             </div>
           </div>
           <React.Suspense>
-            {/* {RenderGraph(responseTimes)} */}
             <RenderGraph responseTimes={responseTimes} />
           </React.Suspense>
         </div>
