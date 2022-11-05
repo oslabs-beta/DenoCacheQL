@@ -61,6 +61,7 @@ const App = () => {
     const queryTextBox: string | undefined = target[0].value;
     let variableTextBox: string | undefined= target[1].value;
     const queryResponse: queryResponse = {};
+    console.log('target', target)
     //submit request, sending user's query in the request body
     if (variableTextBox === '') {
       variableTextBox = undefined;
