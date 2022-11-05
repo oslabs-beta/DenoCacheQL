@@ -61,6 +61,7 @@ const App = () => {
     const queryTextBox: string | undefined = target[0].value;
     let variableTextBox: string | undefined= target[1].value;
     const queryResponse: queryResponse = {};
+    console.log('target', target)
     //submit request, sending user's query in the request body
     if (variableTextBox === '') {
       variableTextBox = undefined;
@@ -165,7 +166,6 @@ const App = () => {
                 </thead>
                 <tbody>
                   {queryHistory.map((historyItem: queryResponse, i: number) => {
-                    // console.log(Object.entries(historyItem.response));
                     let displayResponse = '';
                     for (const [key, value] of Object.entries(
                       historyItem.response
@@ -191,7 +191,6 @@ const App = () => {
             </div>
           </div>
           <React.Suspense>
-            {/* {RenderGraph(responseTimes)} */}
             <RenderGraph responseTimes={responseTimes} />
           </React.Suspense>
         </div>
